@@ -1,0 +1,66 @@
+.Modal {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: transparent;
+  visibility: hidden;
+  z-index:10000;
+  
+  overflow:auto;
+  
+}
+
+.Modal .content {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  width: 95%;
+  border:1px solid;
+  max-height:500px;
+  overflow:auto;
+  padding: 15px;
+  border-radius: 3px;
+  background: white;
+  transform: translate(-50%, -30%) scale(0);
+}
+
+.Modal .closes {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: block;
+  width: 18px;
+  height: 18px;
+  padding: 1px;
+  line-height: 18px;
+  border-radius: 50%;
+  text-align: center;
+  cursor: pointer;
+  background: #2ecc71;
+  color: #fff;
+}
+
+.Modal .closes:before { content: '\2715'; }
+
+.Modal.is-visible {
+  visibility: visible;
+  -webkit-transition: background .35s;
+  -moz-transition: background .35s;
+  transition: background .35s;
+  -webkit-transition-delay: .1s;
+  -moz-transition-delay: .1s;
+  transition-delay: .1s;
+}
+
+.Modal.is-visible .content {
+  -webkit-transform: translate(-50%, -30%) scale(1);
+  -moz-transform: translate(-50%, -30%) scale(1);
+  transform: translate(-50%, -30%) scale(1);
+ -webkit-transform: transition: transform .35s;
+ -moz-transform: transition: transform .35s;
+  transition: transform .35s;
+}
+
+

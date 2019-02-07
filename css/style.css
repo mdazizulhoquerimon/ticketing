@@ -1,0 +1,101 @@
+/* Custom CSS */ 
+
+a:hover { text-decoration: none;}
+.admin-logo {margin: -10px 0;}
+.admin-logo img {width: 170px;}
+
+.user_title{
+	
+	margin-top: 7px;
+	
+	font-weight: bold;
+	color: blue;
+	font-size: 24px;
+
+}
+.tops{
+	
+	margin-top:10px
+	
+}
+.heads{
+	
+	
+	margin-top:20px
+	
+	
+}
+
+#pagi li{
+	
+	float:left;
+	padding:5px
+	
+	
+}
+#pc li{
+	
+	float:left;
+	padding:5px
+	
+}
+.r_padding{
+	
+	padding:5px
+	
+}
+.signin-area {
+  background: #F8F8F8;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.signin-logo {
+    text-align: center;
+    margin: 100px 0 50px 0;
+}
+
+.form-signin {
+    max-width: 330px;
+    margin: 0px auto;
+    background: #fff;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.13);
+    box-shadow: 0 1px 3px rgba(0,0,0,.13);
+}
+.login-wrap {
+    padding: 20px;
+    position: relative;
+}
+.user-login-info {
+    background: #eaeaec;
+    margin: -20px -20px 20px -20px;
+    padding: 20px;
+}
+.form-signin input[type="text"], .form-signin input[type="password"] {
+    margin-bottom: 15px;
+    border: 1px solid #eaeaea;
+    box-shadow: none;
+    font-size: 12px;
+    border-radius: 0;
+}
+.form-signin .form-control {
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.form-signin .btn-login {
+    background: #F60B36;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 300;
+    font-family: 'Open Sans',sans-serif;
+    margin: 20px 0 5px;
+    border-radius: 0;
+}
+.form-signin a {color: #fff;}
+.form-signin a:hover {text-decoration: none; color: #fff;}
