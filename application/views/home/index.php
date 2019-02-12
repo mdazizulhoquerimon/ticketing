@@ -15,7 +15,7 @@
                             <h3><strong><?php echo $val['name'] ?><strong></h3>
                             <p>Address :<?php echo $val['address'] ?></p>
                             <p>Phone :<?php echo $val['phone'] ?></p>
-                            <p>Admin :<?php echo $this->setting->anyName('password', 'id', $val['ch'], 'user') ?></p>
+                            <p>Admin :<?php echo $this->common_model->anyName('password', 'id', $val['ch'], 'user') ?></p>
                         </a>
                     </div>
                 </div>

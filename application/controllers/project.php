@@ -1,6 +1,5 @@
 <?php
 
-
 class Project Extends CI_Controller
 {
     public function __construct()
@@ -37,8 +36,6 @@ class Project Extends CI_Controller
 
     public function project_all(){
 
-        $this->load->model('setting');
-        $data['setting'] = "";
         $data['type'] = 0;
         $data['allStatus']=$this->project_model->getAll('tbl_status','is_active',1);
 

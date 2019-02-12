@@ -6,42 +6,25 @@ $(document).ready(function () {
     $("#con").hide();
 });
 
-
 var incre = values();
 
 function values() {
-
-
     return 0;
 }
 
 function values2() {
     var v = [];
-
-
     return v;
 }
 
 function t2() {
-
     $("#sub").hide();
     $("#con").show();
-
 }
 
 function ttt(id) {
-
-    $("#modals").dialog({
-        modal: true,
-        dialogClass: 'noTitleStuff'
-    });
-    $(".img").show();
-
-
     $("#sub").hide();
     $("#con").show();
-
-
     $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -51,21 +34,28 @@ function ttt(id) {
 
             if (document.getElementById(id + "c").checked) {
 
-
                 var stuff = "";
+
+                var i = 0;
 
                 $.each(data.posts, function (key, val) {
 
-
+                    i = 1;
                     stuff = stuff + "<input onclick=t2() name='active' id='" + val.id + "' value='" + id + ":" + val.id + "' type='checkbox' checked>" + val.name + "";
+
+                    stuff = stuff + "<div class='row' style='border: 2px solid cornsilk;width: 170px;padding: 4px;margin-left: 0px;background: red;color: white;font-weight: bold'><input onclick='t2()' id='" + val.id + "padd' type='checkbox' checked>Add <input id='" + val.id + "pedit' type='checkbox' onclick='t2()' checked>Edit <input type='checkbox' id='" + val.id + "pdel' onclick='t2()' checked>Delete</div>";
 
                 });
 
+                if (i == 0) {
+
+                    stuff = stuff + "<div class='row' style='border: 2px solid cornsilk;width: 170px;padding: 4px;margin-left: 0px;background: red;color: white;font-weight: bold'><input id='" + id + "padd' type='checkbox' checked>Add <input id='" + id + "pedit' type='checkbox' checked>Edit <input type='checkbox' id='" + id + "pdel' checked>Delete</div>";
+
+                }
 
                 document.getElementById(id + "p").innerHTML = stuff;
 
             }
-
             else {
 
                 $.each(data.posts, function (key, val) {
@@ -73,11 +63,6 @@ function ttt(id) {
 
                 });
             }
-
-
-            $(".img").hide();
-            $("#modals").dialog("close");
-
 
         },
         error: function () {
@@ -123,26 +108,13 @@ function downLoad_access(id) {
 }
 
 function getUser(id, type, ware) {
-
-
     $("#user_list").empty();
     $("#sub").val(id);
-
-
     $("#modals").dialog({
         modal: true,
         dialogClass: 'noTitleStuff'
     });
-
-
     $(".img").show();
-
-}
-
-
-function getParent(id) {
-
-
     $.ajax({
         type: 'POST',
         dataType: 'json',
@@ -150,92 +122,46 @@ function getParent(id) {
         data: {id: id, ware: ware, type: type},
         success: function (data) {
 
-
-            if (data.id == 3) {
-
-
+            if (data.id == 3 || data.id == 4) {
                 $("#user").val('you can t access');
-
-
             }
             else {
-
-
                 if (type == 2) {
-
-
                     var stuff = "<option value=" + type + ">Admin</option>";
-
-
                 }
-                else if (type == 3) {
-
+                else if (type == 3 || type == 4) {
                     var stuff = "<option value=" + type + ">User</option>";
-
                     downLoad_access(id);
-
                 }
-
-
                 document.getElementById("type_u").innerHTML = stuff;
-
                 var acc = "";
-
                 $.each(data.access, function (key, val) {
-
                     acc = acc + "<li>" + val.name + "</li>";
-
                 });
-
 
                 $.each(data.users, function (key, val) {
                     var wares = "";
                     var wares_id = "";
-
                     $.each(data.posts, function (key, val) {
-
                         $("#user").val(val.user);
                         $("#password").val(val.password);
-
                         wares = val.ware;
                         wares_id = val.ware2;
-
-
                     });
-
                     if (val.sup != 0) {
-
-
                         var stuff = "<option value=" + wares_id + ">" + wares + "</option>";
-
                         document.getElementById("shop").innerHTML = stuff;
                         document.getElementById("accs").innerHTML = acc;
 
-
-                    }
-                    else {
-
+                    } else {
                         var stuff = "";
-
                         $.each(data.ware, function (key, val) {
-
                             stuff = stuff + "<option value=" + val.id + ">" + val.name + "</option>";
-
                         });
-
-
                         document.getElementById("shop").innerHTML = stuff;
-
-
                     }
-
-
                 });
-
-
             }
-
-
         },
         error: function (jqXHR, textStatus, errorThrown) {
             //alert("Server Error");
@@ -257,6 +183,11 @@ function getParent(id) {
 
         }
     });
+
+
+}
+
+function getParent(id) {
 
 
     var lin = "";
@@ -368,26 +299,6 @@ function addData(data, id) {
 
 }
 
-function create_user2() {
-
-    var user = $("#user").val();
-    var pass = $("#password").val();
-    var shop = $("#shop").val();
-    if (user == '' || pass == '' || shop == '') {
-
-        alert('information not complete');
-    }
-    else {
-
-        $("#sub").show();
-        $("#con").hide();
-
-        incre = 0;
-
-        getParent(0);
-    }
-}
-
 function user_update() {
 
     var active = $('input[name=active]:checked').val();
@@ -397,50 +308,107 @@ function user_update() {
     var shop = $("#shop").val();
     var id = $("#sub").val();
 
-
     if (user == '' || pass == '' || shop == '') {
-
         alert('information not complete');
-
-
-    }
-    else {
-
-
+    } else {
         $("#modals").dialog({
             modal: true,
             dialogClass: 'noTitleStuff'
         });
         $(".img").show();
 
-
-        if (type == 3) {
-
+        if (type == 3 || type == 4) {
             getParent(0);
-
             incre = 0;
+
             var jsonString = JSON.stringify(t);
+
+            var aed = new Array();
+
+            var aed_start = 0;
+
+            for (var i = 0; i < t.length; i++) {
+
+                var is = t[i].split(":");
+
+                if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "padd").is(":checked") && is[0] != 0 && is[1] != 0 && $("#" + is[1]).is(":checked") && $("#" + is[1] + "pedit").is(":checked") && $("#" + is[1] + "pdel").is(":checked")) {
+
+                    aed[aed_start] = "1*1*1";
+                    // alert(aed[aed_start]+" active "+is[0]+" position "+aed_start);
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "padd").is(":checked") && is[0] != 0 && is[1] != 0 && $("#" + is[1]).is(":checked") && $("#" + is[1] + "pedit").is(":checked")) {
+
+                    aed[aed_start] = "1*1*0";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "padd").is(":checked") && is[0] != 0 && is[1] != 0 && $("#" + is[1]).is(":checked") && $("#" + is[1] + "pdel").is(":checked")) {
+
+                    aed[aed_start] = "1*0*1";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "pedit").is(":checked") && is[0] != 0 && is[1] != 0 && $("#" + is[1]).is(":checked") && $("#" + is[1] + "pdel").is(":checked")) {
+
+                    aed[aed_start] = "0*1*1";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "padd").is(":checked") && is[0] != 0 && is[1] != 0) {
+
+                    aed[aed_start] = "1*0*0";
+                    aed_start++;
+
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "pedit").is(":checked") && is[0] != 0 && is[1] != 0) {
+
+                    aed[aed_start] = "0*1*0";
+                    aed_start++;
+
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "pdel").is(":checked") && is[0] != 0 && is[1] != 0) {
+
+                    aed[aed_start] = "0*0*1";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && is[1] != 0) {
+
+                    aed[aed_start] = "0*0*0";
+                    // alert(aed[aed_start]+" head "+is[0]+" position "+aed_start);
+                    aed_start++;
+                }
+
+            }
+
+            var aed_send = JSON.stringify(aed);
 
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
                 url: li + 'user_access/addUserAccessUpdate',
-                data: {data: jsonString, active: active, user: user, pass: pass, type: type, shop: shop, id: id},
+                data: {
+                    data: jsonString,
+                    aed_send: aed_send,
+                    active: active,
+                    user: user,
+                    pass: pass,
+                    type: type,
+                    shop: shop,
+                    id: id
+                },
                 cache: false,
                 success: function (data) {
-
-
                     alert('user update successful');
                     window.location = li + "admin/user_all";
-
-
                 },
-                error: function (xhr, status) {
-                    ///window.location=li+"admin/user_all";
-
-
-                    alert(status);
-
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //alert("Server Error");
+                    if (jqXHR.status === 0) {
+                        alert('Not connect.\n Verify Network.');
+                    } else if (jqXHR.status == 404) {
+                        alert('Requested page not found.');
+                    } else if (jqXHR.status == 500) {
+                        alert('Internal Server Error.');
+                    } else if (errorThrown === 'parsererror') {
+                        alert('Requested JSON parse failed');
+                    } else if (errorThrown === 'timeout') {
+                        alert('Time out error');
+                    } else if (errorThrown === 'abort') {
+                        alert('Ajax request aborted ');
+                    } else {
+                        alert('Uncaught Error.\n' + jqXHR.responseText);
+                    }
 
                 }
             });
@@ -461,8 +429,24 @@ function user_update() {
                     window.location = li + "admin/user_all";
 
                 },
-                error: function (xhr, status) {
-                    window.location = li + "admin/user_all";
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //alert("Server Error");
+                    if (jqXHR.status === 0) {
+                        alert('Not connect.\n Verify Network.');
+                    } else if (jqXHR.status == 404) {
+                        alert('Requested page not found.');
+                    } else if (jqXHR.status == 500) {
+                        alert('Internal Server Error.');
+                    } else if (errorThrown === 'parsererror') {
+                        alert('Requested JSON parse failed');
+                    } else if (errorThrown === 'timeout') {
+                        alert('Time out error');
+                    } else if (errorThrown === 'abort') {
+                        alert('Ajax request aborted ');
+                    } else {
+                        alert('Uncaught Error.\n' + jqXHR.responseText);
+                    }
+
                 }
             });
 
@@ -473,126 +457,6 @@ function user_update() {
     }
 
 }
-
-/*function create_user(){
-
-
-
-
-var active=$('input[name=active]:checked').val();
-var user=$("#user").val();
-var pass=$("#password").val();
-var type=$("#type").val();
-var shop=$("#shop").val();
-
-
-
-if(user == '' || pass == '' || shop == ''){
-
-    alert('information not complete');
-
-
-
-}
-else{
-
-
-    if(type == 3)
-    {
-
-
-    getParent(0);
-
-        incre=0;
-    var jsonString = JSON.stringify(t);
-
-
-
-    $.ajax({
-    type:'POST',
-    dataType:'json',
-    url:li+'jquery_data/addUserAccess',
-    data:{data : jsonString,active:active,user:user,pass:pass,type:type,shop:shop},
-    cache: false,
-    success:function(data)
-    {
-            if(data.id == 1){
-
-                alert('user name already created');
-
-            }
-        else{
-            window.location=li+"admin/create_user";
-                alert('inserted');
-        }
-
-    },
-    error:function(xhr, status)
-    {
-        alert(status);
-    }
-    });
-
-
-
-
-
-
-
-    }
-    else{
-
-        $.ajax({
-    type:'POST',
-    dataType:'json',
-    url:li+'jquery_data/addUser',
-    data:{active:active,user:user,pass:pass,type:type,shop:shop},
-    success:function(data)
-    {
-            if(data.id == 1){
-
-                alert('user name already created');
-
-            }
-        else{
-
-        alert('inserted');
-
-        window.location=li+"admin/create_user";
-
-        }
-
-    },
-    error:function(xhr, status)
-    {
-        alert(status);
-    }
-    });
-
-
-    }
-
-
-
-
-
-
-}
-
-
-
-}*/
-
-
-$("#sp").click(function () { //to show password, call from create_user.php page
-    if ($(this).is(":checked")) {
-        $("#password").attr('type', 'text');
-    }
-    else {
-        $("#password").attr('type', 'password');
-    }
-});
-
 
 function create_user() {
 
@@ -603,61 +467,80 @@ function create_user() {
     var type = $("#type").val();
     var shop = $("#shop").val();
 
-
     if (user == '' || pass == '' || shop == '') {
-
         alert('information not complete');
-
-
-    }
-    else {
+    } else {
         $("#modals").dialog({
             modal: true,
             dialogClass: 'noTitleStuff'
         });
         $(".img").show();
 
-
-        if (type == 3) {
-
+        if (type == 3 || type == 4) {
 
             getParent(0);
-
             incre = 0;
             var jsonString = JSON.stringify(t);
+            var aed = new Array();
+            var aed_start = 0;
 
+            for (var i = 0; i < t.length; i++) {
+                var is = t[i].split(":");
+
+                if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "padd").is(":checked") && is[0] != 0 && is[1] != 0 && $("#" + is[1]).is(":checked") && $("#" + is[1] + "pedit").is(":checked") && $("#" + is[1] + "pdel").is(":checked")) {
+                    aed[aed_start] = "1*1*1";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "padd").is(":checked") && is[0] != 0 && is[1] != 0 && $("#" + is[1]).is(":checked") && $("#" + is[1] + "pedit").is(":checked")) {
+                    aed[aed_start] = "1*1*0";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "padd").is(":checked") && is[0] != 0 && is[1] != 0 && $("#" + is[1]).is(":checked") && $("#" + is[1] + "pdel").is(":checked")) {
+                    aed[aed_start] = "1*0*1";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "pedit").is(":checked") && is[0] != 0 && is[1] != 0 && $("#" + is[1]).is(":checked") && $("#" + is[1] + "pdel").is(":checked")) {
+                    aed[aed_start] = "0*1*1";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "padd").is(":checked") && is[0] != 0 && is[1] != 0) {
+                    aed[aed_start] = "1*0*0";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "pedit").is(":checked") && is[0] != 0 && is[1] != 0) {
+                    aed[aed_start] = "0*1*0";
+                    aed_start++;
+                } else if ($("#" + is[0] + "c").is(":checked") && $("#" + is[1] + "pdel").is(":checked") && is[0] != 0 && is[1] != 0) {
+                    aed[aed_start] = "0*0*1";
+                    aed_start++;
+                }
+            }
+
+            var aed_send = JSON.stringify(aed);
 
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
                 url: li + 'user_access/addUserAccess',
-                data: {data: jsonString, active: active, user: user, pass: pass, type: type, shop: shop},
+                data: {
+                    data: jsonString,
+                    aed_send: aed_send,
+                    active: active,
+                    user: user,
+                    pass: pass,
+                    type: type,
+                    shop: shop
+                },
                 cache: false,
                 success: function (data) {
                     if (data.id == 1) {
-
                         alert('user name already created');
-
                     }
                     else {
-
                         alert('inserted');
-
-
                         window.location = li + "admin/create_user";
-
                     }
-
                 },
                 error: function (xhr, status) {
                     alert(status);
                 }
             });
-
-
-        }
-        else {
-
+        } else {
             $.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -665,50 +548,47 @@ function create_user() {
                 data: {active: active, user: user, pass: pass, type: type, shop: shop},
                 success: function (data) {
                     if (data.id == 1) {
-
                         alert('user name already created');
-
                     }
                     else {
-
                         alert('inserted');
-
                         window.location = li + "admin/create_user";
-
                     }
-
                 },
                 error: function (xhr, status) {
                     alert(status);
                 }
             });
-
-
         }
-
-
     }
     $(".img").hide();
     $("#modals").dialog("close");
+}
 
-
+function create_user2() {
+    var user = $("#user").val();
+    var pass = $("#password").val();
+    var shop = $("#shop").val();
+    if (user == '' || pass == '' || shop == '') {
+        alert('information not complete');
+    } else {
+        $("#sub").show();
+        $("#con").hide();
+        incre = 0;
+        getParent(0);
+    }
 }
 
 function type_per() {
 
-
     var id = $("#type").val();
 
-
-    if (id == 3) {
-
+    if (id == 3 || id ==4) {
         $("#modals").dialog({
             modal: true,
             dialogClass: 'noTitleStuff'
         });
         $(".img").show();
-
-
 
         $.ajax({
             type: 'POST',
@@ -716,40 +596,74 @@ function type_per() {
             url: li + 'user_access/menu',
             data: {id: id},
             success: function (data) {
-
                 var stuff = "";
-
                 $.each(data.posts, function (key, val) {
                     stuff = stuff + "<div class='row'>"
-
                         + "<input onclick=ttt(" + val.id + ") value='" + val.id + ":0' name='active' id='" + val.id + "c' type='checkbox'>" + val.name + ""
-
-                        + "<div class='col-sm-12' id='" + val.id + "p'></div>"
+                        + "<div class='col-sm-12 phover' id='" + val.id + "p'></div>"
+                        + "<div class='col-sm-12' id='" + val.id + "per'></div>"
                         + "</div>";
-
                 });
-
                 $(".img").hide();
                 $("#modals").dialog("close");
-
                 document.getElementById("per").innerHTML = stuff;
-
             },
             error: function () {
                 alert("Server Error");
             }
         });
+    } else {
+        $("#per").empty();
+    }
+}
+
+function process_p2() {
 
 
+    var name = $("#wname").val();
+    var theme = $("#wtheme").val();
+    var address = $("#waddress").val();
+    var phone = $("#wphone").val();
+
+    var vat = $("#wvat").val();
+
+    if (name == '') {
+
+
+        alert('information incomplete');
     }
     else {
 
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: li + 'user_access/addwirehouse',
+            data: {name: name, theme: theme, address: address, phone: phone, vat: vat},
+            success: function (data) {
 
-        $("#per").empty();
+
+                window.location = li + "admin/create_user";
+
+
+            },
+            error: function (error) {
+                alert("Server Error");
+            }
+        });
+
     }
-
 }
 
+$("#sp").click(function () {
+
+    if ($(this).is(":checked")) {
+        $("#password").attr('type', 'text');
+    }
+    else {
+        $("#password").attr('type', 'password');
+    }
+
+});
 
 $("#supplier").click(function () {
 
@@ -776,7 +690,6 @@ $("#supplier").click(function () {
 
 });
 
-
 $("#customer").click(function () {
 
     var name = $("#name").val();
@@ -802,45 +715,6 @@ $("#customer").click(function () {
 
 
 });
-
-function process_p2() {
-
-
-    var name = $("#wname").val();
-    var theme = $("#wtheme").val();
-    var address = $("#waddress").val();
-    var phone = $("#wphone").val();
-
-    var vat = $("#wvat").val();
-    var printer = $('input[name=printer]:checked').val();
-
-    if (name == '') {
-
-
-        alert('information incomplete');
-    }
-    else {
-
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: li + 'user_access/addwirehouse',
-            data: {printer: printer, name: name, theme: theme, address: address, phone: phone, vat: vat},
-            success: function (data) {
-
-
-                window.location = li + "admin/create_user";
-
-
-            },
-            error: function (error) {
-                alert("Server Error");
-            }
-        });
-
-    }
-}
-
 
 $("#sug").keyup(function () {
 
@@ -870,3 +744,4 @@ $("#sug").keyup(function () {
 
 
 });
+
