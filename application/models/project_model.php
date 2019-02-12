@@ -6,9 +6,9 @@ class Project_model extends CI_Model
     public function getAll($table, $col = null, $val = null)
     {
 
-        //$w = $this->session->userdata('wire');
+        $w = $this->session->userdata('wire');
 
-        //$this->db->where("(ware='".$w."' OR ware='0')");
+        $this->db->where("(ware='".$w."' OR ware='0')");
 
         $this->db->order_by('id', 'asc');
         if (!empty($col))

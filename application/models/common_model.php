@@ -39,6 +39,15 @@ class Common_model extends CI_Model
         return $info->result_array();
     }
 
+    public function getAnyInfoRow($table, $col, $val)
+    {
+        if (!empty($col)) {
+            $this->db->where($col, $val);
+        }
+        $info = $this->db->get($table);
+        return $info->row();
+    }
+
     public function anyName($table, $col, $id, $name, $col2 = null, $id2 = null, $col3 = null, $id3 = null)
     {
         $w = $this->session->userdata('wire');

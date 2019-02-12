@@ -5,7 +5,7 @@ class Project Extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('project_model');
+        $this->load->model('common_model');
         $this->load->library('session');
         $this->load->helper(array('form', 'url'));
         $this->load->library("pagination");
@@ -18,10 +18,9 @@ class Project Extends CI_Controller
     public function getSearchProjectList()
     {
         $id=$_POST['id'];
-//        $w=$this->session->userdata('wire');
-//        if(!empty($w))
-//            $this->db->where("(ware='".$w."' OR ware='0')");
-//        //$this->db->where('em_code',$id);
+        $w=$this->session->userdata('wire');
+        if(!empty($w))
+            $this->db->where("(ware='".$w."' OR ware='0')");
         $this->db->like('id', $id);
         $this->db->or_like('project_name', $id);
         $info=$this->db->get('tbl_project');
@@ -36,13 +35,11 @@ class Project Extends CI_Controller
 
     public function project_all(){
 
-        $data['type'] = 0;
-        $data['allStatus']=$this->project_model->getAll('tbl_status','is_active',1);
-
+        $w=$this->session->userdata('wire');
         $admin = $this->session->userdata('admin');
-        $t = $this->session->userdata('wire');
         $type = $this->session->userdata('type');
-
+        $data['type'] = 0;
+        $data['allStatus']=$this->common_model->getAll('tbl_status','is_active',1);
 
         $this->load->view('home/headar',$data);
         $this->load->view('projects/project_all');
@@ -50,6 +47,8 @@ class Project Extends CI_Controller
     }
 
     public function add_new_project(){
+
+        $w=$this->session->userdata('wire');
 
         $project_name= $_POST['project_name'];
         $project_id= $_POST['project_id'];
@@ -59,6 +58,7 @@ class Project Extends CI_Controller
             $data["project_status"]= trim($_POST['project_status']);
             $data["project_start_date"]= trim($_POST['project_start_date']);
             $data["project_end_date"]= trim($_POST['project_end_date']);
+            $data["ware"]= $w;
             if (!empty($project_id)){
                 $this->db->where('id',$project_id);
                 $this->db->update('tbl_project',$data);
@@ -77,17 +77,16 @@ class Project Extends CI_Controller
 
         $search_project = $_POST['search_project'];
 
-        //$w = $this->session->userdata('wire');
-
-        //$this->db->where("(ware='".$w."' OR ware='0')");
+        $w = $this->session->userdata('wire');
 
 //        $this->db->select('Details.item_no,Details.rate,Details.quantity,Details.total,Bill.id,Bill.voucher_no,Bill.check_in_no,Bill.date,Bill.is_paid,');
 //        $this->db->from('laundry_bill_details as Details');
 //        $this->db->join('laundry_bill as Bill', 'Bill.id = Details.laundry_bill_id');
+
+        $this->db->where("(ware='".$w."' OR ware='0')");
         if(!empty($search_project)){
             $this->db->where("project_name",$search_project);
         }
-
         $this->db->order_by('id','asc');
         $info = $this->db->get("tbl_project");
 
@@ -107,20 +106,20 @@ class Project Extends CI_Controller
 
             if($val["project_status"]==1){
                 $post["style"]= "Orange";
-                $post["project_status"]=$this->project_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
+                $post["project_status"]=$this->common_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
             }elseif ($val["project_status"]==2){
                 $post["style"]= "yellow";
-                $post["project_status"]=$this->project_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
+                $post["project_status"]=$this->common_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
             }elseif ($val["project_status"]==3){
                 $post["style"]= "MediumSeaGreen";
-                $post["project_status"]=$this->project_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
+                $post["project_status"]=$this->common_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
             }elseif ($val["project_status"]==4){
                 $post["style"]= "DodgerBlue";
-                $post["project_status"]=$this->project_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
+                $post["project_status"]=$this->common_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
             }
             else{
                 $post["style"]= "Tomato";
-                $post["project_status"]=$this->project_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
+                $post["project_status"]=$this->common_model->anyName('tbl_status', 'id', $val["project_status"], 'status_name');
             }
 
             $post["project_ticket"]=$val["project_ticket"];
@@ -139,7 +138,7 @@ class Project Extends CI_Controller
     public function getProjectInfo(){
 
         $id = $_POST['id'];
-        $res["info"] =  $this->project_model->getAnyInfoRow('tbl_project','id',$id);
+        $res["info"] =  $this->common_model->getAnyInfoRow('tbl_project','id',$id);
         echo json_encode($res);
     }
 }
