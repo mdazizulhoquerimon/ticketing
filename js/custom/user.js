@@ -128,9 +128,11 @@ function getUser(id, type, ware) {
             else {
                 if (type == 2) {
                     var stuff = "<option value=" + type + ">Admin</option>";
-                }
-                else if (type == 3 || type == 4) {
-                    var stuff = "<option value=" + type + ">User</option>";
+                } else if (type == 3) {
+                    var stuff = "<option value=" + type + ">Engineer</option>";
+                    downLoad_access(id);
+                } else if (type == 4) {
+                    var stuff = "<option value=" + type + ">Customer</option>";
                     downLoad_access(id);
                 }
                 document.getElementById("type_u").innerHTML = stuff;

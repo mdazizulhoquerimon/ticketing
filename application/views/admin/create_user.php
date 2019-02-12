@@ -28,13 +28,13 @@
                         <div class="col-sm-7">
                             <form class="form-horizontal bucket-form" method="post" action="<?php echo base_url(); ?>/create_user">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">User Name</label>
+                                    <label class="col-sm-2 control-label">Name:</label>
                                     <div class="col-sm-4">
                                         <input type="text" id="user" class="form-control">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">Password</label>
+                                    <label class="col-sm-2 control-label">Password:</label>
                                     <div class="col-sm-4">
                                         <input type="password" id="password" class="form-control">
                                     </div>
@@ -43,7 +43,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">Type</label>
+                                    <label class="col-sm-2 control-label">Type:</label>
                                     <div class="col-sm-4">
                                         <select id="type" class="form-control" name="type" onchange="type_per()">
                                             <option></option>
@@ -62,7 +62,7 @@
                                 </div>
                                 <?php if ($w == 0) { ?>
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">Warehouse</label>
+                                        <label class="col-sm-2 control-label">Warehouse:</label>
                                         <div class="col-sm-4">
                                             <select class="form-control" id="shop">
                                                 <?php foreach ($ware as $val): ?>
@@ -86,7 +86,9 @@
                                 }
                                 ?>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">Permission</label>
+                                    <div class="col-sm-2">
+                                        <label class="control-label">Permission:</label>
+                                    </div>
                                     <div class="col-sm-6">
                                         <input name="active" value="1" type="radio" checked>Active
                                         <input name="active" value="0" type="radio">Inactive

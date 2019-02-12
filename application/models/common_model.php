@@ -2,18 +2,20 @@
 
 class Common_model extends CI_Model
 {
-    public function getAll($table, $col = null, $val = null, $col2 = null, $val2 = null)
+    public function getAll($table, $col = null, $val = null, $asc = null,$col3 = null, $val3 = null)
     {
 
         $w = $this->session->userdata('wire');
         if (!empty($w))
             $this->db->where("(ware='" . $w . "' OR ware='0')");
-        if (empty($col2))
+        if (empty($asc))
             $this->db->order_by('id', 'DESC');
         else
             $this->db->order_by('id', 'asc');
         if (!empty($col))
             $this->db->where($col, $val);
+        if (!empty($col3))
+            $this->db->where($col3, $val3);
 
         $info = $this->db->get($table);
         return $info->result_array();
@@ -65,7 +67,7 @@ class Common_model extends CI_Model
         }
     }
 
-    public function getPname($table, $col, $id, $name, $col2 = null, $id2 = null, $col3 = null, $id3 = null)
+    public function anyNameWithoutWare($table, $col, $id, $name, $col2 = null, $id2 = null, $col3 = null, $id3 = null)
     {
         $this->db->where($col, $id);
         if (!empty($col2))

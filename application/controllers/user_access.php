@@ -232,7 +232,7 @@ class User_Access extends CI_Controller
         $shop = $_POST['shop'];
 
         $ara = null;
-        $check = $this->common_model->getPname('password', 'user', $user, 'id');
+        $check = $this->common_model->anyNameWithoutWare('password', 'user', $user, 'id');
 
         if (!empty($w)) {
 
@@ -296,7 +296,7 @@ class User_Access extends CI_Controller
         $shop = $_POST['shop'];
 
         $ara = null;
-        $check = $this->common_model->getPname('password', 'user', $user, 'id');
+        $check = $this->common_model->anyNameWithoutWare('password', 'user', $user, 'id');
 
         if (!empty($check)) {
 
