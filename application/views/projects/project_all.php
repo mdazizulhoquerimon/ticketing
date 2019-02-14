@@ -16,7 +16,9 @@
                         <div class="col-md-7">
                             <div class="col-md-6" id="message"></div>
                             <div class="text-right">
-                                <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addProjectModal">Add Project</a>
+                                <?php if($type==1 || $type ==2):?>
+                                    <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addProjectModal">Add Project</a>
+                                <?php endif;?>
                             </div>
                         </div>
                     </div>
@@ -30,7 +32,6 @@
                             <th class="text-center">Start Date</th>
                             <th class="text-center">End Date</th>
                             <th class="text-center">Status</th>
-                            <th class="text-center">Assigned</th>
                             <th class="text-center">Action</th>
                             </thead>
 

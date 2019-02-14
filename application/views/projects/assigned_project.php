@@ -16,7 +16,9 @@
                         <div class="col-md-6">
                             <div class="col-md-6" id="message"></div>
                             <div class="text-right">
-                                <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#assignProjectModal">Assign Project</a>
+                                <?php if($type==1 || $type ==2):?>
+                                    <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#assignProjectModal">Assign Project</a>
+                                <?php endif;?>
                             </div>
                         </div>
                     </div>
@@ -27,8 +29,10 @@
                             <thead>
                             <th class="text-center">SL</th>
                             <th class="text-center">Project Name</th>
-                            <th class="text-center">Engineer</th>
                             <th class="text-center">Customer</th>
+                            <th class="text-center">Is Assign</th>
+                            <th class="text-center">Assigned To</th>
+                            <th class="text-center">Assigned By</th>
                             <th class="text-center">Assigned Date</th>
                             <th class="text-center">Assign Note</th>
                             <th class="text-center">Ticket</th>
@@ -56,7 +60,8 @@
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <input type="hidden" id="project_id" name="project_id">
+                                    <input type="hidden" id="assigned_by" name="assigned_by" value="<?=$admin?>">
+                                    <input type="hidden" id="assigned_id" name="assigned_id">
                                     <div class="form-group row">
                                         <label class="col-md-2 control-label">Projects:</label>
                                         <div class="col-md-4">
@@ -72,7 +77,9 @@
                                             <select class="form-control" id="project_engineer" name="project_engineer">
                                                 <option value=0>Select Engineer</option>
                                                 <?php foreach ($allEngineer as $engineer): ?>
-                                                    <option value="<?= $engineer['id'] ?>"> <?= $engineer['user'] ?> </option>
+                                                    <?php if($engineer['id']!=$admin):?>
+                                                        <option value="<?= $engineer['id'] ?>"> <?= $engineer['user'] ?> </option>
+                                                     <?php endif;?>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
@@ -96,9 +103,14 @@
                                         <label class="col-md-2 control-label">Assign Status:</label>
                                         <div class="col-md-4">
                                             <select class="form-control" id="assign_status" name="assign_status">
-                                                <option value=0>Status</option>
-                                                <option value="1">Assign</option>
-                                                <option value="2">Unassign</option>
+                                                <?php if ($type==1 || $type==2):?>
+                                                    <option value=0>Status</option>
+                                                    <option value="1">Assign</option>
+                                                    <option value="2">Unassign</option>
+                                                    <option value="3">Hand Over</option>
+                                                <?php else:?>
+                                                    <option value="3">Hand Over</option>
+                                                <?php endif;?>
                                             </select>
                                         </div>
                                         <label class="col-md-2 control-label">Note:</label>

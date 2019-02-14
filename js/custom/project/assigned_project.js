@@ -39,14 +39,16 @@ $(document).on("focusout", "#assigned_date", function () {
 });
 
 function add_assigned_project() {
+    var assigned_id = $("#assigned_id").val();
     var assigned_project = $("#assigned_project").val();
+    var assigned_by = $("#assigned_by").val();
     var project_engineer = $("#project_engineer").val();
     var project_customer = $("#project_customer").val();
     var assigned_date = $("#assigned_date").val();
     var assign_status = $("#assign_status").val();
     var assign_note = $("#assign_note").val();
 
-    if (assigned_project != '' && assigned_project != 0 && project_engineer != 0 && project_engineer != ''
+    if (assigned_project != '' && assigned_project != 0 && project_engineer != 0 && project_engineer != '' && project_engineer != null
         && project_customer != 0 && project_customer != '' && assigned_date != 0 && assigned_date != ''
         && assign_status != 0 && assign_status != '') {
         $.ajax({
@@ -54,17 +56,20 @@ function add_assigned_project() {
             dataType: 'json',
             url: li + 'project/add_assigned_project',
             data: {
+                assigned_id: assigned_id,
                 assigned_project: assigned_project,
                 project_engineer: project_engineer,
                 project_customer: project_customer,
                 assigned_date: assigned_date,
                 assign_status: assign_status,
                 assign_note: assign_note,
+                assigned_by: assigned_by,
             },
             success: function (data) {
                 if (data.id == 2) {
                     //alert('inserted');
                     document.getElementById("message").innerHTML = "<h5 style=\"color: darkgreen;\" class=\"animated fadeOut delay-5s\">Project Assigned Succesfully </h5>";
+                    $("#assigned_id").val('');
                     $("#assigned_project").val(0);
                     $("#project_engineer").val(0);
                     $("#project_customer").val(0);
@@ -76,6 +81,20 @@ function add_assigned_project() {
                 } else if (data.id == 1) {
                     //alert('not inserted');
                     document.getElementById("message").innerHTML = "<h5 style=\"color: red;\" class=\"animated fadeOut delay-3s\">Project Assigned Failed </h5>";
+                } else if (data.id == 3) {
+                    $("#assigned_id").val('');
+                    $("#assigned_project").val(0);
+                    $("#project_engineer").val(0);
+                    $("#project_customer").val(0);
+                    $("#assign_status").val(0);
+                    $("#assigned_date").val('');
+                    $("#assign_note").val('');
+                    $('#assignProjectModal').modal('hide');
+                    getAllAssignedProjectInfo();
+                    document.getElementById("message").innerHTML = "<h5 style=\"color: darkgreen;\" class=\"animated fadeOut delay-3s\">Project Hand Overed </h5>";
+                } else if (data.id == 4) {
+
+                    document.getElementById("message1").innerHTML = "<h5 style=\"color: red;\" class=\"animated fadeOut delay-3s\">Can Not be hand Over Until Assign </h5>";
                 } else
                     alert('Please Retry.....');
             },
@@ -144,8 +163,10 @@ function viewAllAssignedProjectList(data) {
         stuff = stuff + "<tr class='text-center " + val.id + "tr'>"
             + "<td>" + (sl++) + "</td>"
             + "<td>" + val.project_name + "</td>"
-            + "<td>" + val.project_engineer + "</td>"
             + "<td>" + val.project_customer + "</td>"
+            + "<td>" + val.is_assigned + "</td>"
+            + "<td>" + val.project_engineer + "</td>"
+            + "<td>" + val.assigned_by + "</td>"
             + "<td>" + val.assigned_date + "</td>"
             + "<td>" + val.assign_note + "</td>"
             + "<td>" + val.project_ticket + "</td>"
@@ -162,12 +183,13 @@ function edit_assigned_project_details(id) {
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        url: li + 'project/getProjectInfo',
+        url: li + 'project/getAssignedProjectInfo',
         data: {id: id},
         success: function (data) {
             $.each(data, function (key, val) {
                 //alert(val.id);
-                $("#assigned_project").val(val.id);
+                $("#assigned_id").val(val.id);
+                $("#assigned_project").val(val.project_id);
                 $("#project_engineer").val(val.project_engineer);
                 $("#project_customer").val(val.project_customer);
                 $("#assigned_date").val(val.assigned_date);

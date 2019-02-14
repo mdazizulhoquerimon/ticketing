@@ -61,6 +61,7 @@ function add_project() {
                 if (data.id == 2) {
                     //alert('inserted');
                     document.getElementById("message").innerHTML = "<h5 style=\"color: red;\" class=\"animated fadeOut delay-2s\">Project Added Succesfully </h5>";
+                    $("#project_id").val('');
                     $("#project_name").val('');
                     $("#project_status").val(0);
                     $("#project_start_date").val('');
@@ -145,17 +146,19 @@ function viewAllProjectList(data) {
     var stuff = "";
     var sl = 1;
     $.each(data.list, function (key, val) {
+
         stuff = stuff + "<tr class='text-center " + val.id + "tr'>"
             + "<td>" + (sl++) + "</td>"
             + "<td>" + val.project_name + "</td>"
             + "<td>" + val.project_start_date + "</td>"
             + "<td>" + val.project_end_date + "</td>"
             + "<td style='background-color: "+val.style+"'> " + val.project_status + "</td>"
-            + "<td>" + val.is_assigned + "</td>"
             + "<td>"
-            + "<a onclick = edit_project_details('"+val.id+"') class='btn btn-sm btn-info' data-toggle='modal' data-target='#addProjectModal' id='edit_project_details'>Edit</a>"
-            + "</td>"
-            + "</tr>";
+            if(val.type==1||val.type==2){
+                stuff = stuff + "<a onclick = edit_project_details('"+val.id+"') class='btn btn-sm btn-info' data-toggle='modal' data-target='#addProjectModal' id='edit_project_details'>Edit</a>"
+            }
+        stuff = stuff + "</td>"
+        stuff = stuff + "</tr>";
     });
     $("#ptoject_details_table_data").html(stuff);
 }
