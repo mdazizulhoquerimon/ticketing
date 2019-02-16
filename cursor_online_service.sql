@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.8.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 16, 2019 at 01:36 PM
+-- Generation Time: Feb 16, 2019 at 08:19 PM
 -- Server version: 10.1.37-MariaDB
--- PHP Version: 7.2.12
+-- PHP Version: 7.3.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -70,13 +70,13 @@ CREATE TABLE `password` (
 --
 
 INSERT INTO `password` (`id`, `user`, `password`, `ware`, `type`, `active`, `by`, `status`, `session`, `rank`) VALUES
-(1, 'hadmin', '123', '0', '1', '1', '1', 0, 'oot4rckkf581sdospnraen6b7p', 1),
-(2, 'Rimon', '123', '1', '3', '1', '1', 0, 'oot4rckkf581sdospnraen6b7p', 0),
+(1, 'hadmin', '123', '0', '1', '1', '1', 0, 'a2aepr2jkq5i2maabojilmubdq', 1),
+(2, 'Rimon', '123', '1', '3', '1', '1', 0, 'a2aepr2jkq5i2maabojilmubdq', 0),
 (3, 'Tasnim', '123', '1', '3', '1', '1', 0, 'a68454ibhkmivmi8spbdo3oi5e', 0),
 (4, 'Ranvir', '123', '1', '3', '1', '1', 0, 'oot4rckkf581sdospnraen6b7p', 0),
 (5, 'Al-Amin', '123', '1', '3', '1', '1', 0, '', 0),
 (6, 'Mizan', '123', '1', '3', '1', '1', 0, '', 0),
-(7, 'kishwannajim', '123', '1', '4', '1', '1', 0, 's9d2iiq6pcvigkscl4trusiono', 0),
+(7, 'kishwannajim', '123', '1', '4', '1', '1', 0, 'a2aepr2jkq5i2maabojilmubdq', 0),
 (8, 'kishwanmahtab', '123', '1', '4', '1', '1', 0, '', 0),
 (9, 'Mijan', '123', '1', '4', '1', '1', 0, '', 0),
 (10, 'admin', '123', '1', '2', '1', '1', 0, 'oot4rckkf581sdospnraen6b7p', 0);
@@ -117,13 +117,14 @@ INSERT INTO `sub_menu` (`id`, `root`, `name`, `links`, `ware`) VALUES
 CREATE TABLE `tbl_assigned_project` (
   `id` int(11) NOT NULL,
   `project_id` int(11) NOT NULL COMMENT 'project_id',
-  `project_ticket` int(11) NOT NULL COMMENT 'ticket_id',
   `is_assigned` int(11) NOT NULL,
   `assigned_by` int(11) NOT NULL COMMENT 'user_id(password_tbl)',
   `project_engineer` int(11) NOT NULL COMMENT 'user_id(password_tbl)',
   `project_customer` int(11) NOT NULL COMMENT 'user_id(password_tbl)',
   `assigned_date` date NOT NULL,
   `assign_note` text NOT NULL,
+  `ticket_id` int(11) NOT NULL COMMENT 'from tbl_tickets',
+  `pending_ticket` int(11) NOT NULL COMMENT 'pending tickets',
   `ware` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -131,13 +132,13 @@ CREATE TABLE `tbl_assigned_project` (
 -- Dumping data for table `tbl_assigned_project`
 --
 
-INSERT INTO `tbl_assigned_project` (`id`, `project_id`, `project_ticket`, `is_assigned`, `assigned_by`, `project_engineer`, `project_customer`, `assigned_date`, `assign_note`, `ware`) VALUES
-(1, 2, 0, 3, 4, 3, 9, '2019-02-06', 'dsds', 0),
-(2, 1, 0, 3, 1, 2, 8, '2019-02-01', 'tttt', 0),
-(3, 4, 0, 1, 1, 4, 8, '2019-02-02', 'rrrrr', 0),
-(4, 4, 0, 1, 1, 2, 8, '2019-02-14', 'ghgh', 0),
-(5, 4, 0, 1, 1, 4, 7, '2019-02-02', 'rrrrr', 0),
-(6, 2, 0, 1, 1, 4, 9, '2019-02-02', 'rrrrrddddiiii', 0);
+INSERT INTO `tbl_assigned_project` (`id`, `project_id`, `is_assigned`, `assigned_by`, `project_engineer`, `project_customer`, `assigned_date`, `assign_note`, `ticket_id`, `pending_ticket`, `ware`) VALUES
+(1, 5, 1, 1, 2, 7, '2019-02-14', 'rrrrrr', 0, 0, 0),
+(2, 4, 1, 1, 5, 9, '2019-02-12', 'dsdsa', 0, 0, 0),
+(3, 2, 1, 1, 4, 9, '2019-02-01', 'dsas', 0, 0, 0),
+(4, 1, 1, 1, 3, 8, '2019-02-01', 'gfzgsfggd', 4, 1, 0),
+(5, 3, 1, 1, 5, 9, '2019-02-01', 'fzdfxz', 2, 2, 0),
+(6, 4, 1, 1, 2, 9, '2019-02-06', 'gdfgfg', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -163,9 +164,8 @@ CREATE TABLE `tbl_message_list` (
 --
 
 INSERT INTO `tbl_message_list` (`id`, `ticket_id`, `message`, `sender`, `receiver`, `message_time`, `is_img`, `ware`, `is_seen`, `status`) VALUES
-(1, 4, 'fdsfds', 1, 0, '2019-02-16 17:23:25', 0, 0, 0, 1),
-(2, 5, 'fdfd', 1, 0, '2019-02-16 17:27:00', 0, 0, 0, 1),
-(3, 6, 'sfsdfdfsdfdsfd', 4, 0, '2019-02-16 17:45:09', 0, 1, 0, 1);
+(1, 1, 'xcvxcvc', 1, 0, '2019-02-17 00:55:07', 0, 0, 0, 1),
+(2, 2, 'fdgfdg', 1, 0, '2019-02-17 00:55:49', 0, 0, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -210,11 +210,11 @@ CREATE TABLE `tbl_project` (
 --
 
 INSERT INTO `tbl_project` (`id`, `project_name`, `project_start_date`, `project_end_date`, `project_status`, `is_assigned`, `assigned_by`, `ware`) VALUES
-(1, 'Kishwan Payroll', '2018-10-01', '2018-11-30', 4, 3, 1, 0),
-(2, 'Yes Payroll', '2018-11-30', '2019-01-31', 4, 3, 4, 0),
-(3, 'Mitaly', '2018-08-01', '2018-09-04', 4, 0, 1, 0),
-(4, 'Hotel Management', '2018-11-30', '', 2, 0, 1, 0),
-(5, 'Danaboy', '2018-12-01', '2018-12-30', 3, 0, 1, 0);
+(1, 'Kishwan Payroll', '2018-10-01', '2018-11-30', 4, 1, 1, 0),
+(2, 'Yes Payroll', '2018-11-30', '2019-01-31', 4, 1, 1, 0),
+(3, 'Mitaly', '2018-08-01', '2018-09-04', 4, 1, 1, 0),
+(4, 'Hotel Management', '2018-11-30', '', 2, 1, 1, 0),
+(5, 'Danaboy', '2018-12-01', '2018-12-30', 3, 1, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -248,7 +248,7 @@ INSERT INTO `tbl_status` (`id`, `status_name`, `is_active`, `ware`) VALUES
 
 CREATE TABLE `tbl_tickets` (
   `id` int(11) NOT NULL,
-  `project_id` int(11) NOT NULL COMMENT 'from tbl_project',
+  `assigned_project_id` int(11) NOT NULL COMMENT 'from tbl_assigned_project',
   `ticket_subject` text NOT NULL,
   `ticket_priority` int(11) NOT NULL,
   `ticket_status_id` int(11) NOT NULL COMMENT 'id of tbl_status',
@@ -264,13 +264,9 @@ CREATE TABLE `tbl_tickets` (
 -- Dumping data for table `tbl_tickets`
 --
 
-INSERT INTO `tbl_tickets` (`id`, `project_id`, `ticket_subject`, `ticket_priority`, `ticket_status_id`, `rating`, `opened_by`, `ticket_date`, `ware`, `user_id`, `status`) VALUES
-(1, 5, 'dfds', 2, 1, 0, 'hadmin', '0000-00-00 00:00:00', 0, 0, 0),
-(2, 4, 'cxzc', 2, 1, 0, 'hadmin', '2019-02-16 16:28:36', 0, 1, 0),
-(3, 3, 'dsas', 3, 1, 0, 'hadmin', '2019-02-16 16:29:14', 0, 1, 0),
-(4, 2, 'dsfad', 1, 1, 0, 'hadmin', '2019-02-16 17:23:25', 0, 1, 0),
-(5, 4, 'dfd', 2, 1, 0, 'hadmin', '2019-02-16 17:27:00', 0, 1, 0),
-(6, 2, 'fdsfd', 3, 1, 0, 'Ranvir', '2019-02-16 17:45:09', 1, 4, 0);
+INSERT INTO `tbl_tickets` (`id`, `assigned_project_id`, `ticket_subject`, `ticket_priority`, `ticket_status_id`, `rating`, `opened_by`, `ticket_date`, `ware`, `user_id`, `status`) VALUES
+(1, 5, 'zvczx', 1, 1, 0, 'hadmin', '2019-02-17 00:55:07', 0, 1, 0),
+(2, 5, 'fdgfdg', 1, 1, 0, 'hadmin', '2019-02-17 00:55:49', 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -349,15 +345,19 @@ INSERT INTO `user_access` (`id`, `ware`, `head`, `user`, `sub`, `add`, `edit`, `
 (18, 1, 3, 5, 6, 1, 1, 1),
 (19, 1, 2, 5, 3, 1, 1, 1),
 (20, 1, 2, 5, 7, 1, 1, 1),
-(21, 1, 3, 7, 4, 1, 1, 1),
-(22, 1, 3, 7, 5, 1, 1, 1),
-(23, 1, 3, 7, 6, 1, 1, 1),
-(24, 1, 3, 8, 4, 1, 1, 1),
-(25, 1, 3, 8, 5, 1, 1, 1),
-(26, 1, 3, 8, 6, 1, 1, 1),
 (27, 1, 3, 9, 4, 1, 1, 1),
 (28, 1, 3, 9, 5, 1, 1, 1),
-(29, 1, 3, 9, 6, 1, 1, 1);
+(29, 1, 3, 9, 6, 1, 1, 1),
+(30, 1, 3, 8, 4, 1, 1, 1),
+(31, 1, 3, 8, 5, 1, 1, 1),
+(32, 1, 3, 8, 6, 1, 1, 1),
+(33, 1, 2, 8, 3, 1, 1, 1),
+(34, 1, 2, 8, 7, 1, 1, 1),
+(35, 1, 2, 7, 3, 1, 1, 1),
+(36, 1, 2, 7, 7, 1, 1, 1),
+(37, 1, 3, 7, 4, 1, 1, 1),
+(38, 1, 3, 7, 5, 1, 1, 1),
+(39, 1, 3, 7, 6, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -506,7 +506,7 @@ ALTER TABLE `tbl_assigned_project`
 -- AUTO_INCREMENT for table `tbl_message_list`
 --
 ALTER TABLE `tbl_message_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tbl_priority`
@@ -530,7 +530,7 @@ ALTER TABLE `tbl_status`
 -- AUTO_INCREMENT for table `tbl_tickets`
 --
 ALTER TABLE `tbl_tickets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tbl_ticket_status`
@@ -548,7 +548,7 @@ ALTER TABLE `tbl_ticket_subjects`
 -- AUTO_INCREMENT for table `user_access`
 --
 ALTER TABLE `user_access`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `ware`
