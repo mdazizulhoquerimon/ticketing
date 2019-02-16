@@ -7,6 +7,7 @@ class Ticket extends CI_Controller
     {
         parent::__construct();
         $this->load->model('ticket_model');
+        $this->load->model('common_model');
         $this->load->library('session');
         $this->load->helper(array('form', 'url'));
         $this->load->library("pagination");
@@ -26,7 +27,7 @@ class Ticket extends CI_Controller
         $data['priorityList'] = $this->ticket_model->getAllPriority();
         $data['ticketStatusList'] = $this->ticket_model->getAllTicketStatus();
         $this->load->view('home/headar', $data);
-        $this->load->view('ticket/create_ticket_view.php', $data);
+        $this->load->view('ticket/create_ticket_view', $data);
         $this->load->view('home/footer');
     }
 
@@ -44,14 +45,19 @@ class Ticket extends CI_Controller
         $data['type'] = 0;
         $data['ticketList'] = $this->ticket_model->getAllTicket();
         // $data['priorityList']    = $this->ticket_model->getAllPriority();
+//        echo("<pre>");
+//        print_r($data);
+//        exit;
+
+
         $data['ticketSubject'] = $this->ticket_model->getAllTicketSubject();
         //$data['ticketStatusList']= $this->ticket_model->getAllTicketStatus();
         if ($rank == 1) {
             $data['notLockTicket'] = $this->ticket_model->get_allTicket_notLock();
-            $data['allAdmin'] = $this->db->query("SELECT * FROM password WHERE type=1")->result();
+            $data['allAdmin'] = $this->db->query("SELECT * FROM password WHERE type=3")->result();
         }
         $this->load->view('home/headar', $data);
-        $this->load->view('ticket/all_ticket_view.php', $data);
+        $this->load->view('ticket/all_ticket_view', $data);
         $this->load->view('home/footer');
     }
 
@@ -93,7 +99,7 @@ class Ticket extends CI_Controller
         $data['messages'] = $this->ticket_model->reply_message($id);
         $data['ticket_id'] = $id;
         $this->load->view('home/headar', $data);
-        $this->load->view('ticket/reply_message_view.php', $data);
+        $this->load->view('ticket/reply_message_view', $data);
         $this->load->view('home/footer');
     }
 
@@ -118,7 +124,7 @@ class Ticket extends CI_Controller
         $data['priorityList'] = $this->ticket_model->getAllPriority();
         $data['ticketStatusList'] = $this->ticket_model->getAllTicketStatus();
         $this->load->view('home/headar', $data);
-        $this->load->view('ticket/completed_ticket_view.php', $data);
+        $this->load->view('ticket/completed_ticket_view', $data);
         $this->load->view('home/footer');
     }
 

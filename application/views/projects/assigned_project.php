@@ -65,7 +65,7 @@
                                     <div class="form-group row">
                                         <label class="col-md-2 control-label">Projects:</label>
                                         <div class="col-md-4">
-                                            <select class="form-control" id="assigned_project" name="assigned_project">
+                                            <select class="form-control" id="assigned_project" name="assigned_project" <?php if($type==3):?> disabled <?php endif;?>>
                                                 <option value=0>Select Project</option>
                                                 <?php foreach ($allProject as $project): ?>
                                                     <option value="<?= $project['id'] ?>"> <?= $project['project_name'] ?> </option>
@@ -87,16 +87,16 @@
                                     <div class="form-group row">
                                         <label class="col-md-2 control-label">Customer:</label>
                                         <div class="col-md-4">
-                                            <select class="form-control" id="project_customer" name="project_customer">
+                                            <select class="form-control" id="project_customer" name="project_customer" <?php if($type==3):?> disabled <?php endif;?> >
                                                 <option value=0>Select Customer</option>
                                                 <?php foreach ($allCustomer as $customer): ?>
-                                                    <option value="<?= $customer['id'] ?>"> <?= $customer['user'] ?> </option>
+                                                    <option value="<?= $customer['id'] ?>" > <?= $customer['user'] ?> </option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>
                                         <label class="col-md-2 control-label">Assigned Date:</label>
                                         <div class="col-md-4">
-                                            <input type="text" class="form-control" id="assigned_date" name="assigned_date">
+                                            <input type="text" class="form-control" id="assigned_date" name="assigned_date" >
                                         </div>
                                     </div>
                                     <div class="form-group row">

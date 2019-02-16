@@ -25,7 +25,7 @@
                 </div>
                 <div class="panel-body" style="width: 100%;">
                     <div class="row rr">
-                        <table class="table table-bordered" style="width:95%; margin: auto">
+                        <table id="" class="table table-striped table-bordered" style="width:95%; margin: auto">
                             <thead>
                             <th class="text-center">SL</th>
                             <th class="text-center">Project Name</th>

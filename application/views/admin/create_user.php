@@ -12,7 +12,7 @@
                     $w = $this->session->userdata('wire');
                     if ($w == 0) {
                         ?>
-                        <a href="#Popup"><strong>Create Warehouse</strong></a>
+                        <a data-toggle="modal" data-target="#Popup"><strong>Create Warehouse</strong></a>
                         <?php
                     } ?>
                 </div>
@@ -125,8 +125,8 @@
             </div>
         </div>
     </div>
-    <div id="Popup" class="Modal">
-        <div class="content" style="width:500px">
+    <div id="Popup" class="modal fade">
+        <div class="modal-content" style="width:500px">
             <div class="row" style='border-bottom:2px solid;text-align:center;margin-bottom:10px'>
                 <h3>CREATE WAREHOUSE</h3>
             </div>

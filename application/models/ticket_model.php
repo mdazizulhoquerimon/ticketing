@@ -8,15 +8,6 @@ class Ticket_model extends CI_Model
         $this->load->database();
     }
 
-    public function getDateTime()
-    {
-        $date_time = new DateTime('now', new DateTimezone('Asia/Dhaka'));
-        $hours = $date_time->format('G');
-        $date_time = $date_time->format('Y-m-d G:i:s');
-        return $date_time;
-
-    }
-
     public function getAllPriority()
     {
         return $this->db->select('*')->from('tbl_priority')->where('status', 1)->get()->result();

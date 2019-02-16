@@ -6,7 +6,6 @@ class Project Extends CI_Controller
     {
         parent::__construct();
         $this->load->model('common_model');
-        $this->load->model('project_model');
         $this->load->library('session');
         $this->load->helper(array('form', 'url'));
         $this->load->library("pagination");
@@ -213,10 +212,14 @@ class Project Extends CI_Controller
                 }else{
                     $ara = array("id" => 4);
                 }
+            } elseif(!empty($assigned_id)) {
+                $this->db->where('id', $assigned_id);
+                $this->db->update('tbl_assigned_project', $data);
+                $ara = array("id" => 2);//updated Into table;
             } else {
                 $data["ware"] = $w;
                 $this->db->insert('tbl_assigned_project', $data);
-                $ara = array("id" => 2);//updated Into table;
+                $ara = array("id" => 2);//inserted Into table;
             }
 
         } else {

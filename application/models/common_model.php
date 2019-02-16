@@ -2,6 +2,14 @@
 
 class Common_model extends CI_Model
 {
+    public function getDateTime()
+    {
+        $date_time = new DateTime('now', new DateTimezone('Asia/Dhaka'));
+        $hours = $date_time->format('G');
+        $date_time = $date_time->format('Y-m-d G:i:s');
+        return $date_time;
+    }
+
     public function getAll($table, $col = null, $val = null, $asc = null,$col3 = null, $val3 = null)
     {
 

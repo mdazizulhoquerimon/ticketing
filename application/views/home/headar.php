@@ -93,10 +93,14 @@
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-envelope fa-fw"></i> <i class="fa fa-caret-down"></i>
-                    <span class="badge" id="count"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-messages" id="details"></ul>
                 <!-- /.dropdown-messages -->
+            </li>
+            <li class="dropdown">
+                <a class=""href="#">
+                    <i class="fa fa-ticket"><span class="badge"><?=$type?></span></i>
+                </a>
             </li>
 
             <!--<li class="dropdown">
@@ -106,7 +110,9 @@
                 <ul class="dropdown-menu dropdown-alerts">
                     <li>
                         <a href="#">
-                            <div>
+
+
+                         <div>
                                 <i class="fa fa-comment fa-fw"></i> New Comment
                                 <span class="pull-right text-muted small">4 minutes ago</span>
                             </div>

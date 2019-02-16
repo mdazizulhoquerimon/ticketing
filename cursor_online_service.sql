@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2019 at 06:29 AM
+-- Generation Time: Feb 16, 2019 at 01:36 PM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -70,15 +70,16 @@ CREATE TABLE `password` (
 --
 
 INSERT INTO `password` (`id`, `user`, `password`, `ware`, `type`, `active`, `by`, `status`, `session`, `rank`) VALUES
-(1, 'hadmin', '123', '0', '1', '1', '', 0, '6fonkbspb5h4g26klj50i68glp', 0),
-(2, 'admin', '123', '1', '2', '1', '1', 0, '7bbml1ukovltre0jn7hu5uau7r', 0),
-(3, 'user23', '123', '1', '3', '1', '1', 0, 'evjk2n35n6js3l3v2qrg3ebekv', 0),
-(4, 'Rimon', '123', '1', '3', '1', '1', 0, '', 0),
-(5, 'Rimon3', '123', '1', '3', '1', '1', 0, '', 0),
-(6, 'Rimon1', '123', '1', '3', '1', '1', 0, '', 0),
-(7, 'Rimon5', '123', '1', '3', '1', '1', 0, 'a477c9cj6nmudk77onfpnq128u', 0),
-(8, 'RimonAdmin', '123', '1', '2', '1', '1', 0, 'a477c9cj6nmudk77onfpnq128u', 0),
-(9, 'Rimon66', '123', '1', '3', '1', '1', 0, '', 0);
+(1, 'hadmin', '123', '0', '1', '1', '1', 0, 'oot4rckkf581sdospnraen6b7p', 1),
+(2, 'Rimon', '123', '1', '3', '1', '1', 0, 'oot4rckkf581sdospnraen6b7p', 0),
+(3, 'Tasnim', '123', '1', '3', '1', '1', 0, 'a68454ibhkmivmi8spbdo3oi5e', 0),
+(4, 'Ranvir', '123', '1', '3', '1', '1', 0, 'oot4rckkf581sdospnraen6b7p', 0),
+(5, 'Al-Amin', '123', '1', '3', '1', '1', 0, '', 0),
+(6, 'Mizan', '123', '1', '3', '1', '1', 0, '', 0),
+(7, 'kishwannajim', '123', '1', '4', '1', '1', 0, 's9d2iiq6pcvigkscl4trusiono', 0),
+(8, 'kishwanmahtab', '123', '1', '4', '1', '1', 0, '', 0),
+(9, 'Mijan', '123', '1', '4', '1', '1', 0, '', 0),
+(10, 'admin', '123', '1', '2', '1', '1', 0, 'oot4rckkf581sdospnraen6b7p', 0);
 
 -- --------------------------------------------------------
 
@@ -99,12 +100,44 @@ CREATE TABLE `sub_menu` (
 --
 
 INSERT INTO `sub_menu` (`id`, `root`, `name`, `links`, `ware`) VALUES
-(1, 1, 'USER', 'admin/create_user', 0),
+(1, 1, 'Add User', 'admin/create_user', 0),
 (2, 1, 'User All', 'admin/user_all', 0),
-(3, 2, 'Project All', 'project/project_all', 0),
-(4, 3, 'New Ticket', 'ticket/create_ticket', 0),
+(3, 2, 'Project All', 'project/project_all_view', 0),
+(4, 3, 'Ticket All', 'ticketing/ticket_all_view', 0),
 (5, 3, 'Opened Ticket', 'ticket/all_ticket', 0),
-(6, 3, 'Completed Ticket', 'ticket/all_completed_ticket', 0);
+(6, 3, 'Completed Ticket', 'ticket/all_completed_ticket', 0),
+(7, 2, 'Assigned Project', 'project/assigned_project_view', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_assigned_project`
+--
+
+CREATE TABLE `tbl_assigned_project` (
+  `id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL COMMENT 'project_id',
+  `project_ticket` int(11) NOT NULL COMMENT 'ticket_id',
+  `is_assigned` int(11) NOT NULL,
+  `assigned_by` int(11) NOT NULL COMMENT 'user_id(password_tbl)',
+  `project_engineer` int(11) NOT NULL COMMENT 'user_id(password_tbl)',
+  `project_customer` int(11) NOT NULL COMMENT 'user_id(password_tbl)',
+  `assigned_date` date NOT NULL,
+  `assign_note` text NOT NULL,
+  `ware` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tbl_assigned_project`
+--
+
+INSERT INTO `tbl_assigned_project` (`id`, `project_id`, `project_ticket`, `is_assigned`, `assigned_by`, `project_engineer`, `project_customer`, `assigned_date`, `assign_note`, `ware`) VALUES
+(1, 2, 0, 3, 4, 3, 9, '2019-02-06', 'dsds', 0),
+(2, 1, 0, 3, 1, 2, 8, '2019-02-01', 'tttt', 0),
+(3, 4, 0, 1, 1, 4, 8, '2019-02-02', 'rrrrr', 0),
+(4, 4, 0, 1, 1, 2, 8, '2019-02-14', 'ghgh', 0),
+(5, 4, 0, 1, 1, 4, 7, '2019-02-02', 'rrrrr', 0),
+(6, 2, 0, 1, 1, 4, 9, '2019-02-02', 'rrrrrddddiiii', 0);
 
 -- --------------------------------------------------------
 
@@ -113,27 +146,26 @@ INSERT INTO `sub_menu` (`id`, `root`, `name`, `links`, `ware`) VALUES
 --
 
 CREATE TABLE `tbl_message_list` (
-  `message_id` int(11) NOT NULL,
-  `is_img` smallint(6) NOT NULL COMMENT '0=no, 1=yes image',
-  `message` text NOT NULL,
-  `to_whom` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL COMMENT 'who send the message',
+  `id` int(11) NOT NULL,
   `ticket_id` int(11) NOT NULL,
-  `ware_id` int(11) NOT NULL,
-  `status` int(11) NOT NULL,
+  `message` text NOT NULL,
+  `sender` int(11) NOT NULL COMMENT 'user_id(password_tbl)',
+  `receiver` int(11) NOT NULL COMMENT 'user_id(password_tbl)',
   `message_time` datetime NOT NULL,
-  `is_seen` int(1) NOT NULL
+  `is_img` smallint(6) NOT NULL COMMENT '0=no, 1=yes image',
+  `ware` int(11) NOT NULL,
+  `is_seen` int(1) NOT NULL,
+  `status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_message_list`
 --
 
-INSERT INTO `tbl_message_list` (`message_id`, `is_img`, `message`, `to_whom`, `user_id`, `ticket_id`, `ware_id`, `status`, `message_time`, `is_seen`) VALUES
-(1, 0, 'Ticket 1', 0, 3, 1, 0, 1, '2019-02-03 13:08:50', 0),
-(2, 0, 'Ticket 1', 0, 3, 2, 0, 1, '2019-02-03 13:15:34', 0),
-(3, 0, 'fdasds', 0, 2, 3, 0, 1, '2019-02-05 11:05:22', 0),
-(4, 0, 'Ticket 1', 0, 1, 4, 0, 1, '2019-02-11 17:13:53', 0);
+INSERT INTO `tbl_message_list` (`id`, `ticket_id`, `message`, `sender`, `receiver`, `message_time`, `is_img`, `ware`, `is_seen`, `status`) VALUES
+(1, 4, 'fdsfds', 1, 0, '2019-02-16 17:23:25', 0, 0, 0, 1),
+(2, 5, 'fdfd', 1, 0, '2019-02-16 17:27:00', 0, 0, 0, 1),
+(3, 6, 'sfsdfdfsdfdsfd', 4, 0, '2019-02-16 17:45:09', 0, 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -168,24 +200,21 @@ CREATE TABLE `tbl_project` (
   `project_start_date` varchar(50) DEFAULT NULL,
   `project_end_date` varchar(50) DEFAULT NULL,
   `project_status` int(11) DEFAULT NULL COMMENT 'status_id',
-  `project_ticket` int(11) DEFAULT NULL COMMENT 'ticket_id'
+  `is_assigned` int(11) NOT NULL,
+  `assigned_by` int(11) NOT NULL COMMENT 'user_id(password_tbl)',
+  `ware` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_project`
 --
 
-INSERT INTO `tbl_project` (`id`, `project_name`, `project_start_date`, `project_end_date`, `project_status`, `project_ticket`) VALUES
-(1, 'Project1', '2019-02-01', '', 1, NULL),
-(2, 'Project2', '2019-01-25', '', 2, NULL),
-(3, 'Project3', '2018-08-01', '2019-01-30', 3, NULL),
-(4, 'Project5', '2018-05-01', '2018-09-30', 4, NULL),
-(5, 'Project 6 updated', '2019-01-01', '', 5, NULL),
-(6, 'Project 7', '2018-11-01', '', 2, NULL),
-(7, 'Project8', '2018-07-01', '2019-02-05', 3, NULL),
-(8, 'Project 9', '2018-07-01', '2018-11-30', 4, NULL),
-(9, 'yyyy', '2019-02-11', '2019-02-13', 1, NULL),
-(10, 'Project23', '2019-02-12', '2019-02-12', 1, NULL);
+INSERT INTO `tbl_project` (`id`, `project_name`, `project_start_date`, `project_end_date`, `project_status`, `is_assigned`, `assigned_by`, `ware`) VALUES
+(1, 'Kishwan Payroll', '2018-10-01', '2018-11-30', 4, 3, 1, 0),
+(2, 'Yes Payroll', '2018-11-30', '2019-01-31', 4, 3, 4, 0),
+(3, 'Mitaly', '2018-08-01', '2018-09-04', 4, 0, 1, 0),
+(4, 'Hotel Management', '2018-11-30', '', 2, 0, 1, 0),
+(5, 'Danaboy', '2018-12-01', '2018-12-30', 3, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -196,19 +225,20 @@ INSERT INTO `tbl_project` (`id`, `project_name`, `project_start_date`, `project_
 CREATE TABLE `tbl_status` (
   `id` int(11) NOT NULL,
   `status_name` varchar(50) DEFAULT NULL,
-  `is_active` tinyint(4) DEFAULT '0'
+  `is_active` tinyint(4) DEFAULT '0',
+  `ware` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbl_status`
 --
 
-INSERT INTO `tbl_status` (`id`, `status_name`, `is_active`) VALUES
-(1, 'Waiting', 1),
-(2, 'Work In Progress', 1),
-(3, 'Completed', 1),
-(4, 'Received By Customer', 1),
-(5, 'Cancled', 1);
+INSERT INTO `tbl_status` (`id`, `status_name`, `is_active`, `ware`) VALUES
+(1, 'Waiting', 1, 0),
+(2, 'Work In Progress', 1, 0),
+(3, 'Completed', 1, 0),
+(4, 'Received By Customer', 1, 0),
+(5, 'Cancled', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -217,14 +247,15 @@ INSERT INTO `tbl_status` (`id`, `status_name`, `is_active`) VALUES
 --
 
 CREATE TABLE `tbl_tickets` (
-  `ticket_id` int(11) NOT NULL,
-  `ticket_sub` text NOT NULL,
-  `priority_id` int(11) NOT NULL COMMENT 'id of tbl_priority',
-  `ticket_status_id` int(11) NOT NULL COMMENT 'id of tbl_ticket_status',
-  `lock_by` int(11) NOT NULL COMMENT '''0'' for all or admin id for who locked it',
+  `id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL COMMENT 'from tbl_project',
+  `ticket_subject` text NOT NULL,
+  `ticket_priority` int(11) NOT NULL,
+  `ticket_status_id` int(11) NOT NULL COMMENT 'id of tbl_status',
   `rating` tinyint(4) NOT NULL,
-  `ticket_date_time` datetime NOT NULL,
-  `ware_id` int(11) NOT NULL,
+  `opened_by` varchar(50) NOT NULL COMMENT '''0'' for all or admin id for who locked it',
+  `ticket_date` datetime NOT NULL,
+  `ware` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `status` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -233,11 +264,13 @@ CREATE TABLE `tbl_tickets` (
 -- Dumping data for table `tbl_tickets`
 --
 
-INSERT INTO `tbl_tickets` (`ticket_id`, `ticket_sub`, `priority_id`, `ticket_status_id`, `lock_by`, `rating`, `ticket_date_time`, `ware_id`, `user_id`, `status`) VALUES
-(1, 'Ticket 1', 3, 1, 0, 0, '2019-02-03 13:08:50', 0, 3, 1),
-(2, 'Ticket 1', 3, 1, 0, 0, '2019-02-03 13:15:34', 0, 3, 1),
-(3, 'Ticket 1', 1, 1, 0, 0, '2019-02-05 11:05:22', 0, 2, 1),
-(4, 'Ticket 1', 2, 1, 0, 0, '2019-02-11 17:13:53', 0, 1, 1);
+INSERT INTO `tbl_tickets` (`id`, `project_id`, `ticket_subject`, `ticket_priority`, `ticket_status_id`, `rating`, `opened_by`, `ticket_date`, `ware`, `user_id`, `status`) VALUES
+(1, 5, 'dfds', 2, 1, 0, 'hadmin', '0000-00-00 00:00:00', 0, 0, 0),
+(2, 4, 'cxzc', 2, 1, 0, 'hadmin', '2019-02-16 16:28:36', 0, 1, 0),
+(3, 3, 'dsas', 3, 1, 0, 'hadmin', '2019-02-16 16:29:14', 0, 1, 0),
+(4, 2, 'dsfad', 1, 1, 0, 'hadmin', '2019-02-16 17:23:25', 0, 1, 0),
+(5, 4, 'dfd', 2, 1, 0, 'hadmin', '2019-02-16 17:27:00', 0, 1, 0),
+(6, 2, 'fdsfd', 3, 1, 0, 'Ranvir', '2019-02-16 17:45:09', 1, 4, 0);
 
 -- --------------------------------------------------------
 
@@ -296,17 +329,35 @@ CREATE TABLE `user_access` (
 --
 
 INSERT INTO `user_access` (`id`, `ware`, `head`, `user`, `sub`, `add`, `edit`, `del`) VALUES
-(1, 1, 3, 3, 4, 1, 1, 1),
-(2, 1, 3, 3, 5, 1, 1, 1),
-(3, 1, 3, 3, 6, 1, 1, 1),
-(4, 1, 1, 4, 1, 1, 1, 1),
-(5, 1, 1, 4, 2, 1, 1, 1),
-(8, 1, 3, 6, 4, 1, 1, 1),
-(9, 1, 3, 6, 5, 1, 1, 1),
-(10, 1, 3, 6, 6, 1, 1, 1),
-(11, 1, 1, 7, 1, 1, 1, 1),
-(12, 1, 1, 7, 2, 1, 1, 1),
-(13, 1, 2, 7, 3, 1, 1, 1);
+(1, 1, 2, 2, 3, 1, 1, 1),
+(2, 1, 2, 2, 7, 1, 1, 1),
+(3, 1, 3, 2, 4, 1, 1, 1),
+(4, 1, 3, 2, 5, 1, 1, 1),
+(5, 1, 3, 2, 6, 1, 1, 1),
+(6, 1, 2, 3, 3, 1, 1, 1),
+(7, 1, 2, 3, 7, 1, 1, 1),
+(8, 1, 3, 3, 4, 1, 1, 1),
+(9, 1, 3, 3, 5, 1, 1, 1),
+(10, 1, 3, 3, 6, 1, 1, 1),
+(11, 1, 2, 4, 3, 1, 1, 1),
+(12, 1, 2, 4, 7, 1, 1, 1),
+(13, 1, 3, 4, 4, 1, 1, 1),
+(14, 1, 3, 4, 5, 1, 1, 1),
+(15, 1, 3, 4, 6, 1, 1, 1),
+(16, 1, 3, 5, 4, 1, 1, 1),
+(17, 1, 3, 5, 5, 1, 1, 1),
+(18, 1, 3, 5, 6, 1, 1, 1),
+(19, 1, 2, 5, 3, 1, 1, 1),
+(20, 1, 2, 5, 7, 1, 1, 1),
+(21, 1, 3, 7, 4, 1, 1, 1),
+(22, 1, 3, 7, 5, 1, 1, 1),
+(23, 1, 3, 7, 6, 1, 1, 1),
+(24, 1, 3, 8, 4, 1, 1, 1),
+(25, 1, 3, 8, 5, 1, 1, 1),
+(26, 1, 3, 8, 6, 1, 1, 1),
+(27, 1, 3, 9, 4, 1, 1, 1),
+(28, 1, 3, 9, 5, 1, 1, 1),
+(29, 1, 3, 9, 6, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -334,7 +385,7 @@ CREATE TABLE `ware` (
 --
 
 INSERT INTO `ware` (`id`, `name`, `acces`, `ch`, `user`, `address`, `theme`, `phone`, `vat`, `ware`, `barcode`, `printer`) VALUES
-(1, 'CursorBD', 0, 9, '0', 'Chattogram', '', '', '', 0, 0, 0);
+(1, 'CursorBD', 0, 10, '0', 'Chattogram', '', '', '', 0, 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -362,10 +413,16 @@ ALTER TABLE `sub_menu`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Indexes for table `tbl_assigned_project`
+--
+ALTER TABLE `tbl_assigned_project`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `tbl_message_list`
 --
 ALTER TABLE `tbl_message_list`
-  ADD PRIMARY KEY (`message_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_priority`
@@ -389,7 +446,7 @@ ALTER TABLE `tbl_status`
 -- Indexes for table `tbl_tickets`
 --
 ALTER TABLE `tbl_tickets`
-  ADD PRIMARY KEY (`ticket_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tbl_ticket_status`
@@ -431,19 +488,25 @@ ALTER TABLE `menu`
 -- AUTO_INCREMENT for table `password`
 --
 ALTER TABLE `password`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `sub_menu`
 --
 ALTER TABLE `sub_menu`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `tbl_assigned_project`
+--
+ALTER TABLE `tbl_assigned_project`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tbl_message_list`
 --
 ALTER TABLE `tbl_message_list`
-  MODIFY `message_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_priority`
@@ -455,7 +518,7 @@ ALTER TABLE `tbl_priority`
 -- AUTO_INCREMENT for table `tbl_project`
 --
 ALTER TABLE `tbl_project`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_status`
@@ -467,7 +530,7 @@ ALTER TABLE `tbl_status`
 -- AUTO_INCREMENT for table `tbl_tickets`
 --
 ALTER TABLE `tbl_tickets`
-  MODIFY `ticket_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tbl_ticket_status`
@@ -485,7 +548,7 @@ ALTER TABLE `tbl_ticket_subjects`
 -- AUTO_INCREMENT for table `user_access`
 --
 ALTER TABLE `user_access`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `ware`

@@ -42,7 +42,7 @@
                                     <input list="ticket_sub" type="text" style="font-size:12pt;" id="ticket_subject" class="form-control" name="title">
                                     <datalist id="ticket_sub">
                                         <?php foreach ($ticketSubject as $sub):?>
-                                            <option value="<?= $sub->ticket_subject ?>">
+                                            <option value="<?= $sub->ticket_subject ?>"></option>
                                         <?php endforeach; ?>
                                     </datalist>
                                 </div>

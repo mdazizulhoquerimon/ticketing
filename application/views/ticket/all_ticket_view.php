@@ -50,7 +50,7 @@
                             <td>
                                 <?php
                                 $type= $this->session->userdata('type');
-                                if($type==2 && $ticket->lock_by==0): ?>
+                                if($type==2 || $type == 1 && $ticket->lock_by==0): ?>
                                 <a href='#' class="btn btn-sm btn-danger edit-ticket"
                                    ticket-id="<?= $ticket->ticket_id ?>" data-toggle="tooltip" data-placement="top"
                                    title="Edit!">
@@ -68,18 +68,6 @@
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
-                    <tfoot>
-                    <tr>
-                        <th>#SL.</th>
-                        <th>Subject</th>
-
-                        <th>User</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Create Date Time</th>
-                        <th>Action</th>
-                    </tr>
-                    </tfoot>
                 </table>
             </div>
         </div>

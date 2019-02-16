@@ -1,6 +1,6 @@
 var li = links();
 
-function getSearchAssignedProjectList(v) {
+function getTickettList(v) {
     var vv = $(v).val();
     if (vv != '') {
         $(v).addClass('ac_loading');
@@ -21,80 +21,45 @@ function getSearchAssignedProjectList(v) {
     }
 }
 
-$(document).ready(function () {
-    $('#assigned_date').datepicker({
-        daysOfWeekHighlighted: "5",
-        autoclose: true,
-        todayHighlight: true,
-        format: 'yyyy-mm-dd'
-    });
-});
+function add_new_ticket() {
+    var ticket_id = $("#ticket_id").val();
+    var opened_by = $("#opened_by").val();
+    var project_id = $("#project_id").val();
+    var ticket_subject = $("#ticket_subject").val();
+    var ticket_priority = $("#ticket_priority").val();
+    var ticket_message = $("#ticket_message").val();
 
-$(document).on("focusin", "#assigned_date", function () {
-    $(this).prop('readonly', true);
-});
-
-$(document).on("focusout", "#assigned_date", function () {
-    $(this).prop('readonly', false);
-});
-
-function add_assigned_project() {
-    var assigned_id = $("#assigned_id").val();
-    var assigned_project = $("#assigned_project").val();
-    var assigned_by = $("#assigned_by").val();
-    var project_engineer = $("#project_engineer").val();
-    var project_customer = $("#project_customer").val();
-    var assigned_date = $("#assigned_date").val();
-    var assign_status = $("#assign_status").val();
-    var assign_note = $("#assign_note").val();
-
-    if (assigned_project != '' && assigned_project != 0 && project_engineer != 0 && project_engineer != '' && project_engineer != null
-        && project_customer != 0 && project_customer != '' && assigned_date != 0 && assigned_date != ''
-        && assign_status != 0 && assign_status != '') {
+    if (project_id != '' && project_id != 0 && ticket_subject != 0 && ticket_subject != ''
+        && ticket_priority != 0 && ticket_priority != '' && ticket_message != 0 && ticket_message != '') {
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            url: li + 'project/add_assigned_project',
+            url: li + 'ticketing/add_new_ticket',
             data: {
-                assigned_id: assigned_id,
-                assigned_project: assigned_project,
-                project_engineer: project_engineer,
-                project_customer: project_customer,
-                assigned_date: assigned_date,
-                assign_status: assign_status,
-                assign_note: assign_note,
-                assigned_by: assigned_by,
+                ticket_id: ticket_id,
+                opened_by: opened_by,
+                project_id: project_id,
+                ticket_subject: ticket_subject,
+                ticket_priority: ticket_priority,
+                ticket_message: ticket_message,
             },
             success: function (data) {
                 if (data.id == 2) {
                     //alert('inserted');
                     document.getElementById("message").innerHTML = "<h5 style=\"color: darkgreen;\" class=\"animated fadeOut delay-5s\">Succesfull</h5>";
-                    $("#assigned_id").val('');
-                    $("#assigned_project").val(0);
-                    $("#project_engineer").val(0);
-                    $("#project_customer").val(0);
-                    $("#assign_status").val(0);
-                    $("#assigned_date").val('');
-                    $("#assign_note").val('');
-                    $('#assignProjectModal').modal('hide');
-                    getAllAssignedProjectInfo();
+                    $("#ticket_id").val('');
+                    $("#project_id").val(0);
+                    $("#ticket_subject").val('');
+                    $("#ticket_priority").val(0);
+                    $("#ticket_message").val('');
+                    $('#newTicketModal').modal('hide');
                 } else if (data.id == 1) {
                     //alert('not inserted');
                     document.getElementById("message").innerHTML = "<h5 style=\"color: red;\" class=\"animated fadeOut delay-3s\">Project Assigned Failed </h5>";
                 } else if (data.id == 3) {
-                    $("#assigned_id").val('');
-                    $("#assigned_project").val(0);
-                    $("#project_engineer").val(0);
-                    $("#project_customer").val(0);
-                    $("#assign_status").val(0);
-                    $("#assigned_date").val('');
-                    $("#assign_note").val('');
-                    $('#assignProjectModal').modal('hide');
-                    getAllAssignedProjectInfo();
-                    document.getElementById("message").innerHTML = "<h5 style=\"color: darkgreen;\" class=\"animated fadeOut delay-3s\">Project Hand Overed </h5>";
-                } else if (data.id == 4) {
+                    $('#newTicketModal').modal('hide');
 
-                    document.getElementById("message1").innerHTML = "<h5 style=\"color: red;\" class=\"animated fadeOut delay-3s\">Can Not be hand Over Until Assign </h5>";
+                    document.getElementById("message").innerHTML = "<h5 style=\"color: darkgreen;\" class=\"animated fadeOut delay-3s\">Project Hand Overed </h5>";
                 } else
                     alert('Please Retry.....');
             },
@@ -123,17 +88,17 @@ function add_assigned_project() {
     }
 }
 
-function getAllAssignedProjectInfo(v) {
+function getAllTicketInfo(v) {
 
-    var search_assigned_project = $("#search_assigned_project").val();
+    var search_ticket = $("#search_ticket").val();
 
     $.ajax({
         type: 'POST',
         dataType: 'json',
-        url: li + 'project/getAllAssignedProjectInfo/',
-        data: {search_assigned_project: search_assigned_project},
+        url: li + 'ticketing/getAllTicketInfo/',
+        data: {search_ticket: search_ticket},
         success: function (data) {
-            viewAllAssignedProjectList(data);
+            viewAllTicketList(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             //alert("Server Error");
@@ -156,29 +121,28 @@ function getAllAssignedProjectInfo(v) {
     });
 }
 
-function viewAllAssignedProjectList(data) {
+function viewAllTicketList(data) {
     var stuff = "";
     var sl = 1;
     $.each(data.list, function (key, val) {
         stuff = stuff + "<tr class='text-center " + val.id + "tr'>"
             + "<td>" + (sl++) + "</td>"
             + "<td>" + val.project_name + "</td>"
-            + "<td>" + val.project_customer + "</td>"
-            + "<td>" + val.is_assigned + "</td>"
-            + "<td>" + val.project_engineer + "</td>"
-            + "<td>" + val.assigned_by + "</td>"
-            + "<td>" + val.assigned_date + "</td>"
-            + "<td>" + val.assign_note + "</td>"
-            + "<td>" + val.project_ticket + "</td>"
+            + "<td>" + val.ticket_subject + "</td>"
+            + "<td>" + val.ticket_priority + "</td>"
+            + "<td>" + val.ticket_status + "</td>"
+            + "<td>" + val.rating + "</td>"
+            + "<td>" + val.opened_by + "</td>"
+            + "<td>" + val.ticket_date + "</td>"
             + "<td>"
-            + "<a onclick = edit_assigned_project_details('"+val.id+"') class='btn btn-sm btn-info' data-toggle='modal' data-target='#assignProjectModal' id='edit_project_details'>Edit</a>"
+            + "<a onclick = edit_ticket_details('"+val.id+"') class='btn btn-sm btn-info' data-toggle='modal' data-target='#assignProjectModal' id='edit_project_details'>Edit</a>"
             + "</td>"
             + "</tr>";
     });
     $("#ptoject_details_table_data").html(stuff);
 }
 
-function edit_assigned_project_details(id) {
+function edit_ticket_details(id) {
     //alert(id);
     $.ajax({
         type: 'POST',
