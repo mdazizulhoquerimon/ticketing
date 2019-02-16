@@ -20,23 +20,18 @@ class Ticketing extends CI_Controller
     //.........................Ticketing All Functionality Start..................................//
     public function ticket_all_view()
     {
-
         $w = $this->session->userdata('wire');
         $admin = $this->session->userdata('admin');
         $type = $this->session->userdata('type');
         $data['type'] = $type;
         $data['admin'] = $admin;
         $data['user'] = $this->common_model->anyNameWithoutWare('password', 'id',$admin, 'user');
-        if ($type == 1 || $type == 2) {
-            $data['allProject'] = $this->common_model->getAll('tbl_project');
+        if ($type == 3) {
+            $data['allProject'] = $this->common_model->getAll('tbl_assigned_project', 'project_engineer', $admin);
+        }elseif ($type == 4) {
+            $data['allProject'] = $this->common_model->getAll('tbl_assigned_project', 'project_customer', $admin);
         } else {
-            $projects = $this->common_model->getAll('tbl_assigned_project', 'project_engineer', $admin);
-            foreach ($projects as $projects_id) {
-                $res[] = $projects_id["project_id"];
-            }
-            $this->db->where_in('id', $res);
-            $info = $this->db->get('tbl_project');
-            $data['allProject'] = $info->result_array();
+            $data['allProject'] = $this->common_model->getAll('tbl_assigned_project');
         }
 
         $this->load->view('home/headar', $data);
@@ -51,9 +46,10 @@ class Ticketing extends CI_Controller
         $admin = $this->session->userdata('admin');
         $ticket_subject = $_POST['ticket_subject'];
         $ticket_id = $_POST['ticket_id'];
+        $assigned_project_id = trim($_POST['project_id']);
 
         if (!empty($ticket_subject)) {
-            $data["project_id"] = trim($_POST['project_id']);
+            $data["assigned_project_id"] = $assigned_project_id;
             $data["ticket_subject"] = $ticket_subject;
             $data["ticket_priority"] = trim($_POST['ticket_priority']);
             $data["ticket_status_id"] = 1;// 1 means pending;
@@ -71,8 +67,8 @@ class Ticketing extends CI_Controller
                 $ara = array("id" => 3);//Updated the table;
             } else {
                 $this->db->insert('tbl_tickets', $data);
-
                 $ticket_id = $this->db->insert_id();
+
                 $message['ticket_id'] = $ticket_id;
                 $message['message'] = trim($_POST['ticket_message']);
                 $message['sender'] = $admin;
@@ -82,6 +78,21 @@ class Ticketing extends CI_Controller
                 $message['ware'] = $w;
                 $message['status'] = 1;
                 $this->db->insert('tbl_message_list', $message);
+
+
+                $this->db->select('COUNT(assigned_project_id) as count');
+                $this->db->from('tbl_tickets');
+                $this->db->where('assigned_project_id',$assigned_project_id);
+                $this->db->where('ticket_status_id',1);
+                $query = $this->db->get();
+                if ($query->num_rows() > 0 )
+                {
+                    $row = $query->row();
+                    $data1['pending_ticket'] = $row->count;
+                }
+                $data1['ticket_id'] =$ticket_id;
+                $this->db->where('id', $assigned_project_id);
+                $this->db->update('tbl_assigned_project', $data1);
 
                 $ara = array("id" => 2);//Inserted Into table;
             }
@@ -99,10 +110,12 @@ class Ticketing extends CI_Controller
         $w = $this->session->userdata('wire');
         $admin = $this->session->userdata('admin');
 
-        $this->db->where("(ware='" . $w . "' OR ware='0')");
+//        $this->db->where("(ware='" . $w . "' OR ware='0')");
+
         if (!empty($search_ticket)) {
             $this->db->where("ticket_subject", $search_ticket);
         }
+
         $this->db->order_by('id', 'asc');
         $info = $this->db->get("tbl_tickets");
 
@@ -113,7 +126,8 @@ class Ticketing extends CI_Controller
             $post = array();
             $post["type"] = $type;
             $post["id"] = $val["id"];
-            $post["project_name"] = $this->common_model->anyNameWithoutWare('tbl_project', 'id',$val["project_id"], 'project_name');
+            $poject_id = $this->common_model->anyNameWithoutWare('tbl_assigned_project', 'id',$val["assigned_project_id"], 'project_id');
+            $post["project_name"] = $this->common_model->anyNameWithoutWare('tbl_project', 'id',$poject_id, 'project_name');
             $post["ticket_subject"] = $val["ticket_subject"];
             $post["ticket_priority"] = $val["ticket_priority"];
             $post["ticket_status"] = $val["ticket_status_id"];

@@ -171,9 +171,11 @@ function viewAllAssignedProjectList(data) {
             + "<td>" + val.assign_note + "</td>"
             + "<td>" + val.project_ticket + "</td>"
             + "<td>"
-            + "<a onclick = edit_assigned_project_details('"+val.id+"') class='btn btn-sm btn-info' data-toggle='modal' data-target='#assignProjectModal' id='edit_project_details'>Edit</a>"
-            + "</td>"
-            + "</tr>";
+            if(val.type==1||val.type==2 || val.type==3){
+                stuff = stuff + "<a onclick = edit_assigned_project_details('"+val.id+"') class='btn btn-sm btn-info' data-toggle='modal' data-target='#assignProjectModal' id='edit_assigned_project_details'>Edit</a>"
+            }
+            stuff = stuff + "</td>"
+            stuff = stuff + "</tr>";
     });
     $("#ptoject_details_table_data").html(stuff);
 }

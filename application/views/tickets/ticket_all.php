@@ -63,12 +63,18 @@
                                         <div class="col-md-4">
                                             <input type="text" value="<?=$user;?>" class="form-control" id="opened_by" name="opened_by" readonly>
                                         </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label class="col-md-2 control-label">Project:</label>
-                                        <div class="col-md-4">
+                                        <div class="col-md-10">
                                             <select class="form-control" id="project_id" name="project_id">
-                                                <option value=0>Select Project</option>
+                                                <option value=0>Select (Project->Engineer->Customer)</option>
                                                 <?php foreach ($allProject as $project): ?>
-                                                    <option value="<?= $project['id'] ?>"> <?= $project['project_name'] ?> </option>
+                                                    <option value="<?= $project['id'] ?>">
+                                                        <?= $this->common_model->anyNameWithoutWare('tbl_project', 'id',$project['project_id'], 'project_name');?> ->
+                                                        <?= $this->common_model->anyNameWithoutWare('password', 'id',$project['project_engineer'], 'user');?> ->
+                                                        <?= $this->common_model->anyNameWithoutWare('password', 'id',$project['project_customer'], 'user');?>
+                                                    </option>
                                                 <?php endforeach; ?>
                                             </select>
                                         </div>

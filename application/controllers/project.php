@@ -149,9 +149,11 @@ class Project Extends CI_Controller
         $data['type'] = $type;
         $data['allEngineer'] = $this->common_model->getAll('password', 'type', 3, 'asc', 'active', 1);
         $data['allCustomer'] = $this->common_model->getAll('password', 'type', 4, 'asc', 'active', 1);
-        if ($type == 1 || $type == 2) {
+        $data['allProject'] = $this->common_model->getAll('tbl_project');
+        //if want to load the project data according to the user//
+        /*if ($type == 1 || $type == 2) {
             $data['allProject'] = $this->common_model->getAll('tbl_project');
-        } else {
+        } else if ($type == 3) {
             $projects = $this->common_model->getAll('tbl_assigned_project', 'project_engineer', $admin);
             foreach ($projects as $projects_id) {
                 $res[] = $projects_id["project_id"];
@@ -159,7 +161,7 @@ class Project Extends CI_Controller
             $this->db->where_in('id', $res);
             $info = $this->db->get('tbl_project');
             $data['allProject'] = $info->result_array();
-        }
+        }*/
         $this->load->view('home/headar', $data);
         $this->load->view('projects/assigned_project');
         $this->load->view('home/footer');
@@ -219,6 +221,11 @@ class Project Extends CI_Controller
             } else {
                 $data["ware"] = $w;
                 $this->db->insert('tbl_assigned_project', $data);
+
+                $data2["is_assigned"] = $is_assigned;
+                $data2["assigned_by"] = trim($_POST['assigned_by']);
+                $this->db->where('id', $project_id);
+                $this->db->update('tbl_project', $data2);
                 $ara = array("id" => 2);//inserted Into table;
             }
 
@@ -239,8 +246,8 @@ class Project Extends CI_Controller
 
         $this->db->where("(ware='" . $w . "' OR ware='0')");
         $this->db->where("(is_assigned='1' OR is_assigned='3')");
-        if ($type == 3) {
-            $this->db->where('project_engineer', $admin);
+        if ($type == 3 || $type == 4) {
+            $this->db->where("(project_engineer='" . $admin . "' OR project_customer='".$admin."')");
         }
         if (!empty($search_project)) {
             $this->db->where("project_id", $search_project);
@@ -253,6 +260,7 @@ class Project Extends CI_Controller
         foreach ($info->result_array() as $val) {
 
             $post = array();
+            $post["type"] = $type;
             $post["id"] = $val["id"];
             $post["project_id"] = $val["project_id"];
             $post["project_name"] = $this->common_model->anyNameWithoutWare('tbl_project', 'id', $val["project_id"], 'project_name');

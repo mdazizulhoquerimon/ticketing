@@ -19,12 +19,11 @@ class Admin extends CI_Controller
     public function index()
     {
         $data['setting'] = "";
-        $data['type'] = 0;
 
         $admin = $this->session->userdata('admin');
         $t = $this->session->userdata('wire');
         $type = $this->session->userdata('type');
-
+        $data['type'] = $type;
         $this->load->view('home/headar', $data);
 
         $data['wire'] = $this->common_model->getWareList('ware', 'name', 'asc');
