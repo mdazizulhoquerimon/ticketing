@@ -7,7 +7,13 @@ class Ticket_model extends CI_Model
     {
         $this->load->database();
     }
-
+    public function getDateTime()
+    {
+        $date_time = new DateTime('now', new DateTimezone('Asia/Dhaka'));
+        $hours = $date_time->format('G');
+        $date_time = $date_time->format('Y-m-d G:i:s');
+        return $date_time;
+    }
     public function getAllPriority()
     {
         return $this->db->select('*')->from('tbl_priority')->where('status', 1)->get()->result();
@@ -188,7 +194,7 @@ class Ticket_model extends CI_Model
         $ticket_id = $this->input->post('ticket_id');
         $data['ticket_status_id'] = 4; //4=complete from tbl_ticket_status
         //$this->db->where('ticket_id',$ticket_id)->update('tbl_tickets',$data);
-        $this->db->where('ticket_id', $ticket_id);
+        $this->db->where('id', $ticket_id);
         $this->db->update('tbl_tickets', $data);
         if ($this->db->affected_rows() == 1) {
             return true;
@@ -199,22 +205,22 @@ class Ticket_model extends CI_Model
     {
         $ticket_id = $this->input->post('ticket_id');
         $msg['message'] = $this->input->post('msg');
-        $data['user_id'] = $this->session->userdata('admin');
+        $data['sender'] = $this->session->userdata('admin');
         $data['type'] = $this->session->userdata('type');
 
-        $ticket_info = $this->db->select('*')->from('tbl_tickets')->where('ticket_id', $ticket_id)->get()->row();
+        $ticket_info = $this->db->select('*')->from('tbl_tickets')->where('id', $ticket_id)->get()->row();
 
-        if ($data['user_id'] == $ticket_info->user_id) {
+        if ($data['sender'] == $ticket_info->user_id) {
 
-            $msg['to_whom'] = $ticket_info->lock_by;
-            $msg['user_id'] = $data['user_id'];
+            $msg['receiver'] = $ticket_info->opened_by;
+            $msg['sender'] = $data['sender'];
         } elseif ($data['type'] == 1) {
-            $msg['to_whom'] = $ticket_info->user_id;
-            $msg['user_id'] = $ticket_info->lock_by;
+            $msg['receiver'] = $ticket_info->user_id;
+            $msg['sender'] = $ticket_info->opened_by;
         }
         $msg['is_img'] = 0;
-        $msg['ticket_id'] = $ticket_info->ticket_id;
-        $msg['ware_id'] = $this->session->userdata('wire');
+        $msg['ticket_id'] = $ticket_info->id;
+        $msg['ware'] = $this->session->userdata('wire');
         $msg['message_time'] = $this->getDateTime();
         $this->db->insert('tbl_message_list', $msg);
         return $msg;

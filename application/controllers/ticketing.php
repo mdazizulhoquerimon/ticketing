@@ -25,10 +25,11 @@ class Ticketing extends CI_Controller
         $type = $this->session->userdata('type');
         $data['type'] = $type;
         $data['admin'] = $admin;
-        $data['user'] = $this->common_model->anyNameWithoutWare('password', 'id',$admin, 'user');
+        $data['user'] = $this->common_model->anyNameWithoutWare('password', 'id', $admin, 'user');
+        $data['allEngineer'] = $this->common_model->getAll('password', 'type', 3, 'asc', 'active', 1);
         if ($type == 3) {
             $data['allProject'] = $this->common_model->getAll('tbl_assigned_project', 'project_engineer', $admin);
-        }elseif ($type == 4) {
+        } elseif ($type == 4) {
             $data['allProject'] = $this->common_model->getAll('tbl_assigned_project', 'project_customer', $admin);
         } else {
             $data['allProject'] = $this->common_model->getAll('tbl_assigned_project');
@@ -48,16 +49,19 @@ class Ticketing extends CI_Controller
         $ticket_id = $_POST['ticket_id'];
         $assigned_project_id = trim($_POST['project_id']);
 
+
         if (!empty($ticket_subject)) {
             $data["assigned_project_id"] = $assigned_project_id;
             $data["ticket_subject"] = $ticket_subject;
             $data["ticket_priority"] = trim($_POST['ticket_priority']);
             $data["ticket_status_id"] = 1;// 1 means pending;
             $data["opened_by"] = trim($_POST['opened_by']);
+            $data['ticket_message'] = trim($_POST['ticket_message']);
             $data["ticket_date"] = $this->common_model->getDateTime();
             $data["user_id"] = $admin;
             $data["ware"] = $w;
             if (!empty($ticket_id)) {
+
                 $this->db->where('id', $ticket_id);
                 $this->db->update('tbl_tickets', $data);
 
@@ -65,6 +69,7 @@ class Ticketing extends CI_Controller
                 $this->db->where('ticket_id', $ticket_id);
                 $this->db->update('tbl_message_list', $message);
                 $ara = array("id" => 3);//Updated the table;
+
             } else {
                 $this->db->insert('tbl_tickets', $data);
                 $ticket_id = $this->db->insert_id();
@@ -82,15 +87,14 @@ class Ticketing extends CI_Controller
 
                 $this->db->select('COUNT(assigned_project_id) as count');
                 $this->db->from('tbl_tickets');
-                $this->db->where('assigned_project_id',$assigned_project_id);
-                $this->db->where('ticket_status_id',1);
+                $this->db->where('assigned_project_id', $assigned_project_id);
+                $this->db->where('ticket_status_id', 1);
                 $query = $this->db->get();
-                if ($query->num_rows() > 0 )
-                {
+                if ($query->num_rows() > 0) {
                     $row = $query->row();
                     $data1['pending_ticket'] = $row->count;
                 }
-                $data1['ticket_id'] =$ticket_id;
+                $data1['ticket_id'] = $ticket_id;
                 $this->db->where('id', $assigned_project_id);
                 $this->db->update('tbl_assigned_project', $data1);
 
@@ -110,10 +114,18 @@ class Ticketing extends CI_Controller
         $w = $this->session->userdata('wire');
         $admin = $this->session->userdata('admin');
 
-//        $this->db->where("(ware='" . $w . "' OR ware='0')");
-
         if (!empty($search_ticket)) {
-            $this->db->where("ticket_subject", $search_ticket);
+            $this->db->where("assigned_project_id", $search_ticket);
+        }
+
+        if ($type != 1) {
+            $this->db->where("(ware='" . $w . "' OR ware='0')");
+        }
+
+        if ($type == 3 || $type == 4) {
+            $engineer_assigned_id = $this->common_model->anyNameWithoutWare('tbl_assigned_project', 'project_engineer', $admin, 'id');
+            $customer_assigned_id = $this->common_model->anyNameWithoutWare('tbl_assigned_project', 'project_customer', $admin, 'id');
+            $this->db->where("(assigned_project_id='" . $engineer_assigned_id . "' OR assigned_project_id='" . $customer_assigned_id . "' OR project_engineer = '" . $admin . "')");
         }
 
         $this->db->order_by('id', 'asc');
@@ -126,19 +138,96 @@ class Ticketing extends CI_Controller
             $post = array();
             $post["type"] = $type;
             $post["id"] = $val["id"];
-            $poject_id = $this->common_model->anyNameWithoutWare('tbl_assigned_project', 'id',$val["assigned_project_id"], 'project_id');
-            $post["project_name"] = $this->common_model->anyNameWithoutWare('tbl_project', 'id',$poject_id, 'project_name');
+            $poject_id = $this->common_model->anyNameWithoutWare('tbl_assigned_project', 'id', $val["assigned_project_id"], 'project_id');
+            $poject_engineer = $this->common_model->anyNameWithoutWare('tbl_assigned_project', 'id', $val["assigned_project_id"], 'project_engineer');
+            $poject_customer = $this->common_model->anyNameWithoutWare('tbl_assigned_project', 'id', $val["assigned_project_id"], 'project_customer');
+            $post["project_name"] = $this->common_model->anyNameWithoutWare('tbl_project', 'id', $poject_id, 'project_name') . '->' . $this->common_model->anyNameWithoutWare('password', 'id', $poject_engineer, 'user') . '->' . $this->common_model->anyNameWithoutWare('password', 'id', $poject_customer, 'user');
             $post["ticket_subject"] = $val["ticket_subject"];
-            $post["ticket_priority"] = $val["ticket_priority"];
-            $post["ticket_status"] = $val["ticket_status_id"];
+
+            if ($val["ticket_priority"] == 1) {
+
+                $post["ticket_priority"] = "LOW";
+            } elseif ($val["ticket_priority"] == 2) {
+
+                $post["ticket_priority"] = "Medium";
+            } elseif ($val["ticket_priority"] == 3) {
+
+                $post["ticket_priority"] = "HIGH";
+            }
+
+            if ($val["ticket_status_id"] == 1) {
+                $post["style"] = "Orange";
+                $post["ticket_status"] = $this->common_model->anyNameWithoutWare('tbl_status', 'id', $val["ticket_status_id"], 'status_name');
+            } elseif ($val["ticket_status_id"] == 2) {
+                $post["style"] = "yellow";
+                $post["ticket_status"] = $this->common_model->anyNameWithoutWare('tbl_status', 'id', $val["ticket_status_id"], 'status_name');
+            } elseif ($val["ticket_status_id"] == 3) {
+                $post["style"] = "MediumSeaGreen";
+                $post["ticket_status"] = $this->common_model->anyNameWithoutWare('tbl_status', 'id', $val["ticket_status_id"], 'status_name');
+            } elseif ($val["ticket_status_id"] == 4) {
+                $post["style"] = "DodgerBlue";
+                $post["ticket_status"] = $this->common_model->anyNameWithoutWare('tbl_status', 'id', $val["ticket_status_id"], 'status_name');
+            } else {
+                $post["style"] = "Tomato";
+                $post["ticket_status"] = $this->common_model->anyNameWithoutWare('tbl_status', 'id', $val["ticket_status_id"], 'status_name');
+            }
+            if ($val["is_hand_over"] == 1) {
+                $post["is_hand_over"] = "Yes";
+            } else {
+                $post["is_hand_over"] = "No";
+            }
+            if ($val["hand_over_by"]) {
+                $post["hand_over_by"] = $val["hand_over_by"];
+            } else {
+                $post["hand_over_by"] = "Not Yet";
+            }
+            if ($val["project_engineer"]) {
+                $post["hand_over_to"] = $this->common_model->anyNameWithoutWare('password', 'id', $val["project_engineer"], 'user');
+            } else {
+                $post["hand_over_to"] = "Not Yet";
+            }
+            $post["ticket_date"] = $val["ticket_date"];
             $post["rating"] = $val["rating"];
             $post["opened_by"] = $val["opened_by"];
-            $post["ticket_date"] = $val["ticket_date"];
 
             array_push($res["list"], $post);
         }
         //print_r($res);
         echo json_encode($res);
     }
+
+    public function getTicketInfo()
+    {
+        $id = $_POST['id'];
+        $res["info"] = $this->common_model->getAnyInfoRow('tbl_tickets', 'id', $id);
+        echo json_encode($res);
+    }
+
+    public function hand_over_ticket()
+    {
+        $ticket_id = $_POST['ticket_id'];
+        if (!empty($ticket_id)) {
+
+            $project_engineer = trim($_POST['project_engineer']);
+            $is_hand_over = trim($_POST['is_hand_over']);
+            $hand_over_by = trim($_POST['hand_over_by']);
+            if($is_hand_over==1){
+                $data['project_engineer'] = $project_engineer;
+                $data['is_hand_over'] = $is_hand_over;
+                $data['hand_over_by'] = $hand_over_by;
+            }else{
+                $data['project_engineer'] = '';
+                $data['is_hand_over'] = '';
+                $data['hand_over_by'] = '';
+            }
+            $this->db->where('id', $ticket_id);
+            $this->db->update('tbl_tickets', $data);
+            $ara = array("id" => 2);
+        } else {
+            $ara = array("id" => 1);
+        }
+        echo json_encode($ara);
+    }
+
     //.........................Ticketing All Functionality End..................................//
 }

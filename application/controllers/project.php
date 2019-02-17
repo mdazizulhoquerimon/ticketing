@@ -35,7 +35,8 @@ class Project Extends CI_Controller
     {
         $id = $_POST['id'];
         $w = $this->session->userdata('wire');
-        if (!empty($w))
+        $type = $this->session->userdata('type');
+        if (!empty($w)&&$type!=1)
             $this->db->where("(ware='" . $w . "' OR ware='0')");
         $this->db->like('id', $id);
         $this->db->or_like('project_name', $id);
@@ -84,8 +85,9 @@ class Project Extends CI_Controller
         $type = $this->session->userdata('type');
         $w = $this->session->userdata('wire');
         $admin = $this->session->userdata('admin');
-
-        $this->db->where("(ware='" . $w . "' OR ware='0')");
+        if($type!=1){
+            $this->db->where("(ware='" . $w . "' OR ware='0')");
+        }
         if (!empty($search_project)) {
             $this->db->where("project_name", $search_project);
         }
@@ -243,8 +245,9 @@ class Project Extends CI_Controller
         $w = $this->session->userdata('wire');
         $admin = $this->session->userdata('admin');
         $type = $this->session->userdata('type');
-
-        $this->db->where("(ware='" . $w . "' OR ware='0')");
+        if($type!=1){
+            $this->db->where("(ware='" . $w . "' OR ware='0')");
+        }
         $this->db->where("(is_assigned='1' OR is_assigned='3')");
         if ($type == 3 || $type == 4) {
             $this->db->where("(project_engineer='" . $admin . "' OR project_customer='".$admin."')");
@@ -272,10 +275,11 @@ class Project Extends CI_Controller
             } else {
                 $post["assign_note"] = $val["assign_note"];
             }
-            if (empty($val["project_ticket"])) {
+            if (empty($val["ticket_id"])) {
                 $post["project_ticket"] = "NONE";
             } else {
-                $post["project_ticket"] = $val["project_ticket"];
+                $post["project_ticket"] = "YES";
+                $post["ticket_id"] = $val["ticket_id"];
             }
             if ($val["is_assigned"] == 1) {
                 $post["is_assigned"] = "ASSIGNED";
@@ -298,7 +302,6 @@ class Project Extends CI_Controller
 
     public function getAssignedProjectInfo()
     {
-
         $id = $_POST['id'];
         $res["info"] = $this->common_model->getAnyInfoRow('tbl_assigned_project', 'id', $id);
         echo json_encode($res);

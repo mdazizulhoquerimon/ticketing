@@ -14,8 +14,8 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://localhost/ticketing/';
-//$config['base_url']	= 'https://www.cursorbd.com/ticketing/';
+//$config['base_url']	= 'http://localhost/ticketing/';
+$config['base_url']	= 'https://www.support.cursorbd.com/';
 
 /*
 |--------------------------------------------------------------------------

@@ -23,20 +23,25 @@
                 </div>
                 <div class="panel-body" style="width: 100%;">
                     <div class="row rr">
-                        <table id="" class="table table-striped table-bordered" style="width:95%; margin: auto">
+                        <table id="" class="table table-striped table-bordered" style="width:100%; margin: auto">
                             <thead>
                             <th class="text-center">SL</th>
-                            <th class="text-center">Project Name</th>
+                            <th class="text-center">Project Details</th>
                             <th class="text-center">Subject</th>
                             <th class="text-center">Priority</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Rating</th>
                             <th class="text-center">Opened By</th>
+                            <th class="text-center">Is Hand Over</th>
+                            <th class="text-center">Hand Over By</th>
+                            <th class="text-center">Hand Over To</th>
                             <th class="text-center">Date</th>
-                            <th class="text-center">Action</th>
+                            <th class="text-center">Edit</th>
+                            <th class="text-center">Hand Over</th>
+                            <th class="text-center">Reply</th>
                             </thead>
 
-                            <tbody id="ptoject_details_table_data">
+                            <tbody id="ticket_details_table_data">
 
                             </tbody>
 
@@ -121,12 +126,72 @@
                     </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
+
+            <!--change status modal-->
+            <div class="modal fade" id="TicketChangeStatusModal" role="dialog" aria-labelledby="TicketChangeStatusModalLabel">
+                <div class="modal-dialog modal-md" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h4 class="modal-title">Hand Over Ticket</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <input type="hidden" id="ticket_id" name="ticket_id">
+                                    <div class="form-group row">
+                                        <label class="col-md-4 control-label">Hand Over By:</label>
+                                        <div class="col-md-8">
+                                            <input type="text" value="<?=$user;?>" class="form-control" id="hand_over_by" name="hand_over_by" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-4 control-label">Hand Over To:</label>
+                                        <div class="col-md-8">
+                                            <select class="form-control" id="project_engineer" name="project_engineer">
+                                                <option value=0>Select Engineer</option>
+                                                <?php foreach ($allEngineer as $engineer): ?>
+                                                    <?php if($engineer['id']!=$admin):?>
+                                                        <option value="<?= $engineer['id'] ?>"> <?= $engineer['user'] ?> </option>
+                                                    <?php endif;?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-md-4 control-label">Is Hand Over:</label>
+                                        <div class="col-md-8">
+                                            <select class="form-control" id="is_hand_over" name="is_hand_over">
+                                                <option value=0>Select Status</option>
+                                                <option value="1">Yes</option>
+                                                <option value="2"<?php if ($type==3):?> disabled <?php endif;?>>No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <button onclick="hand_over_ticket()" type="submit" class="btn btn-default">Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer text-center">
+                            <div class="col-md-6" id="message2"></div>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div>
     </div>
 </div>
 
 <script src="<?php echo base_url(); ?>js/custom/link.js"></script>
 <script src="<?php echo base_url(); ?>js/custom/ticket/ticket_all.js"></script>
+
+<script src="<?php echo base_url(); ?>js/custom/ticket.js"></script>
 <script >
     window.onload = function(e){
         getAllTicketInfo();

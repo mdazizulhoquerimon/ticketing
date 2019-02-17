@@ -1,5 +1,5 @@
 function links() {
-    var li = "http://localhost/ticketing/";
-    // var li="https://www.cursorbd.com/ticketing/";
+    // var li = "http://localhost/ticketing/";
+    var li="https://www.support.cursorbd.com/";
     return li;
 }

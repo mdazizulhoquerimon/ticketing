@@ -15,7 +15,7 @@
                     <tr style="line-height: 3;">
 
                         <td>
-                            <?php  if ($loginId == $msg->user_id):?>
+                            <?php  if ($loginId == $msg->sender):?>
                             <div style="text-align: right;">
                                 <span class="td" id="txt">
                                     <?php if ($msg->is_img==0):?>

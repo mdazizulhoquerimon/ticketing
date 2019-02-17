@@ -48,15 +48,16 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = '';
-$db['default']['database'] = 'cursor_online_service';
-
 //$db['default']['hostname'] = 'localhost';
-//$db['default']['username'] = 'cursor';
-//$db['default']['password'] = 'sVP;kpQVNLTU';
+//$db['default']['username'] = 'root';
+//$db['default']['password'] = '';
 //$db['default']['database'] = 'cursor_online_service';
+
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = 'supportc_dbuser';
+$db['default']['password'] = 'Cursorsupport';
+$db['default']['database'] = 'supportc_ursor';
+
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
