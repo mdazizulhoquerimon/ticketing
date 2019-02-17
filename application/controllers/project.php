@@ -183,7 +183,7 @@ class Project Extends CI_Controller
 
         $data = array();
         foreach ($info->result_array() as $val) {
-            array_push($data, $val['project_name']);
+            array_push($data,$val['id']."*".$val['project_name']);
         }
         echo json_encode($data);
     }
@@ -240,21 +240,22 @@ class Project Extends CI_Controller
     public function getAllAssignedProjectInfo()
     {
 
-        $search_project = $_POST['search_assigned_project'];
-
         $w = $this->session->userdata('wire');
         $admin = $this->session->userdata('admin');
         $type = $this->session->userdata('type');
         if($type!=1){
             $this->db->where("(ware='" . $w . "' OR ware='0')");
         }
-        $this->db->where("(is_assigned='1' OR is_assigned='3')");
         if ($type == 3 || $type == 4) {
             $this->db->where("(project_engineer='" . $admin . "' OR project_customer='".$admin."')");
         }
-        if (!empty($search_project)) {
-            $this->db->where("project_id", $search_project);
+        if(!empty($_POST['search_assigned_project'])){
+            $project_id=explode("*",$_POST['search_assigned_project']);
         }
+        if(!empty($project_id[0])){
+            $this->db->where("project_id",$project_id[0]);
+        }
+        $this->db->where("(is_assigned='1' OR is_assigned='3')");
         $this->db->order_by('id', 'asc');
         $info = $this->db->get("tbl_assigned_project");
 

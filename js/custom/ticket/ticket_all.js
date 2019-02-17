@@ -1,5 +1,22 @@
 var li = links();
 
+$(document).ready(function () {
+    $('#from_date,#to_date').datepicker({
+        daysOfWeekHighlighted: "5",
+        autoclose: true,
+        todayHighlight: true,
+        format: 'yyyy-mm-dd'
+    });
+});
+
+$(document).on("focusin", "#from_date,#to_date", function () {
+    $(this).prop('readonly', true);
+});
+
+$(document).on("focusout", "#from_date,#to_date", function () {
+    $(this).prop('readonly', false);
+});
+
 function getTickettList(v) {
     var vv = $(v).val();
     if (vv != '') {
@@ -9,7 +26,7 @@ function getTickettList(v) {
                 $.ajax({
                     type: 'POST',
                     dataType: 'json',
-                    url: li + 'project/getSearchAssignedProjectList/',
+                    url: li + 'ticketing/getTickettList/',
                     data: {id: vv},
                     success: function (data) {
                         response(data);
@@ -99,14 +116,22 @@ function add_new_ticket() {
 function getAllTicketInfo(v) {
 
     var search_ticket = $("#search_ticket").val();
-
+    var from_date = $("#from_date").val();
+    var to_date = $("#to_date").val();
     $.ajax({
         type: 'POST',
         dataType: 'json',
         url: li + 'ticketing/getAllTicketInfo/',
-        data: {search_ticket: search_ticket},
+        data: {
+            search_ticket: search_ticket,
+            from_date: from_date,
+            to_date: to_date,
+        },
         success: function (data) {
             viewAllTicketList(data);
+            $("#search_ticket").val('');
+            $("#from_date").val('');
+            $("#to_date").val('');
         },
         error: function (jqXHR, textStatus, errorThrown) {
             //alert("Server Error");

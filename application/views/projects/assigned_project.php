@@ -4,16 +4,16 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h4 class="card-title col-md-3">Assigned Project List</h4>
+                        <h4 class="card-title col-md-2">Assigned Project List</h4>
                         <div class="col-sm-2">
-                            <input onkeyup="getSearchAssignedProjectList(this)" class="form-control" id="search_assigned_project" placeholder="Search"/>
+                            <input onkeyup="getSearchAssignedProjectList(this)" class="form-control" id="search_assigned_project" placeholder="Search Project"/>
                         </div>
                         <div class="col-sm-1">
                             <button onclick="getAllAssignedProjectInfo(this)" class="btn btn-primary"><span
                                     class='glyphicon glyphicon-search'></span>Search
                             </button>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-7">
                             <div class="col-md-6" id="message"></div>
                             <div class="text-right">
                                 <?php if($type==1 || $type ==2):?>

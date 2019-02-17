@@ -6,7 +6,7 @@
                     <div class="row">
                         <h4 class="card-title col-md-2">Project List</h4>
                         <div class="col-sm-2">
-                            <input onkeyup="getSearchProjectList(this)" class="form-control" id="search_project" placeholder="Search"/>
+                            <input onkeyup="getSearchProjectList(this)" class="form-control" id="search_project" placeholder="Search Project"/>
                         </div>
                         <div class="col-sm-1">
                             <button onclick="getAllProjectInfo(this)" class="btn btn-primary"><span

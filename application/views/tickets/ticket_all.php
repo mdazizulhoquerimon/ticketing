@@ -4,26 +4,40 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <h4 class="card-title col-md-2">Ticket List</h4>
-                        <div class="col-sm-2">
-                            <input onkeyup="getTickettList(this)" class="form-control" id="search_ticket" placeholder="Search"/>
-                        </div>
-                        <div class="col-sm-1">
-                            <button onclick="getAllTicketInfo(this)" class="btn btn-primary"><span
-                                    class='glyphicon glyphicon-search'></span>Search
-                            </button>
-                        </div>
-                        <div class="col-md-7">
+                        <h4 class="card-title col-sm-2">Ticket List</h4>
+                        <div class="col-sm-10">
                             <div class="col-md-6" id="message"></div>
                             <div class="text-right">
                                 <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#newTicketModal">New Ticket</a>
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input onkeyup="getTickettList(this)" class="form-control" id="search_ticket" placeholder="Search Project"/>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="col-md-4 control-label">From:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="from_date" name="from_date" >
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <label class="col-md-2 control-label">To:</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" id="to_date" name="to_date" >
+                            </div>
+                        </div>
+                        <div class="col-sm-1">
+                            <button onclick="getAllTicketInfo(this)" class="btn btn-primary"><span
+                                        class='glyphicon glyphicon-search'></span>Search
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 <div class="panel-body" style="width: 100%;">
                     <div class="row rr">
-                        <table id="" class="table table-striped table-bordered" style="width:100%; margin: auto">
+                        <table id="" class="table table-striped table-bordered table-responsive" style="width:100%; margin: auto">
                             <thead>
                             <th class="text-center">SL</th>
                             <th class="text-center">Project Details</th>
@@ -190,10 +204,5 @@
 
 <script src="<?php echo base_url(); ?>js/custom/link.js"></script>
 <script src="<?php echo base_url(); ?>js/custom/ticket/ticket_all.js"></script>
-
 <script src="<?php echo base_url(); ?>js/custom/ticket.js"></script>
-<script >
-    window.onload = function(e){
-        getAllTicketInfo();
-    }
-</script>
+
